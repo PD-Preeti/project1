@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Dataflow group">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="shortcut icon" href="{% static 'adminboard/images/DFLogo.svg' %}" type="image/x-icon">
+
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.2.7/dist/css/uikit.min.css" />
+    <link rel="stylesheet" href="{% static 'adminboard/css/uikit.min.css' %}" />
+
+    <!-- Fontawesome -->
+    <script defer src="https://kit.fontawesome.com/8aa13c88ab.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    {% block extrastyle %}
+    <title>Home</title>
+    <!-- <script defer>
+        document.querySelector('#body').classList.add('uk-hidden');
+    </script> -->
+    {% endblock %}
+
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="{% static 'adminboard/css/main.css' %}">
+</head>
+<body>
+
+    <div id="body">
+        {% if entry_email in admin_emails %}
+
+            <!-- Header -->
+            {% include 'adminboard/header.html' %}
+
+            <!-- Toast -->
+            {% if messages %}
+            {% for message in messages|slice:":1" %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                <script>M.toast({html: "{{message}}", classes: 'toast toast-success', displayLength:2000});</script>
+                {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                <script>M.toast({html: "{{message}}", classes: 'toast toast-warning', displayLength:2000});</script>
+                {% endif %}
+            {% endfor %}
+            {% endif %}
+            
+            <!-- Main -->
+            <main id="app" class="tm-main uk-section uk-section-muted">
+                <div class="uk-container uk-position-relative router-view">
+                    {% block html %}
+                        {% include 'adminboard/courses.html' %}
+                    {% endblock %}
+                </div>
+            </main>
+
+        {% else %}
+            {% include 'adminboard/notauthorized_admin.html' %}
+        {% endif %}
+    </div>
+
+    {% block loader %}
+    <!-- <div id="preloader" class="uk-background-muted">
+        <div class="head uk-text-center">
+            While you're reading this we're getting the interface ready for you!
+        </div>
+        <span class="preloader__base"></span>
+    </div> -->
+    {% endblock %}
+
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.7/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.7/dist/js/uikit-icons.min.js"></script>
+
+    <!-- Scripts Modules-->
+    {% block scripts %}
+    <!-- <script src="{% static 'adminboard/js/loader.js' %}"></script> -->
+    <script src="{% static 'adminboard/js/ui.js' %}"></script>
+    {% endblock %}
+</body>
+</html>
+

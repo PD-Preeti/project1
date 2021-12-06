@@ -1,0 +1,68 @@
+{% load staticfiles %}
+<form 
+    class="uk-width-1-2@l uk-form-stacked uk-margin-top" 
+    id="carouselForm" 
+    method="post" 
+    action="" 
+    enctype="multipart/form-data"
+>{% csrf_token %}
+
+    <div class="uk-margin-bottom">
+        <div class="uk-grid-small uk-child-width-auto uk-grid" id="carouselType">
+            <label for="" class="uk-form-label uk-text-bold">Carousel Type</label>
+            <label><input class="uk-radio" type="radio" name="carousel_type" value="Courses" required checked data-id="input"> Courses</label>
+            <label><input class="uk-radio" type="radio" name="carousel_type" value="Other" data-id="input"> Other</label>
+        </div>
+    </div>
+
+    <div class="uk-margin-bottom">
+        <label for="" class="uk-form-label">Carousel title</label>
+        <div class="uk-form-controls uk-position-relative">
+            <input class="uk-input" name="carousel_title" type="text" placeholder="Course XYZ" id="courseTitle" required=true autocomplete="off">
+            <span class="error-p uk-hidden">Please provide carousel title</span>
+        </div>
+    </div>
+
+    <div class="uk-margin-bottom">
+        <label for="" class="uk-form-label">Carousel Description (optional)</label>
+        <div class="uk-form-controls uk-position-relative">
+            <textarea class="uk-textarea" name="carousel_description" id="carouselDescription" rows="2" placeholder="Provide 1-2 lines of description"></textarea>
+        </div>
+    </div>
+
+    <div class="uk-margin-bottom carousel-course" uk-margin>
+        <label for="" class="uk-form-label">Select Course</label>
+        <div class="uk-form-controls">
+            <select name="carousel_course" class="uk-select" id="courseList" autocomplete="off">
+                <option value="">--courses--</option>
+                {% if courses %}
+                {% for i in courses %}
+                <option value="{{i|safe}}">{{i|safe}}</option>
+                {% endfor %}
+                {% endif %}
+            </select>
+            <span class="error-p uk-hidden">Please select a course</span>
+        </div>
+    </div>
+
+    <div uk-form-custom="target: true" class="uk-width-1-1 uk-margin-bottom">
+        <label for="" class="uk-form-label">Upload Carousel Cover</label>
+        <input type="file" name="carousel_cover" accept=".jpg, .jpeg, .png, .svg" required>
+        <input class="uk-input elem-disabled" type="text" placeholder="Select cover image..." disabled>
+        <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+    </div>
+
+    <div class="uk-margin-bottom carousel-link uk-hidden">
+        <label for="" class="uk-form-label">Relevent Link</label>
+        <div class="uk-form-controls uk-position-relative">
+            <input class="uk-input" name="carousel_link" type="text" placeholder="http://studyhall.com/notes" id="carouselLink" autocomplete="off">
+            <span class="error-p uk-hidden">Please provide relevent link</span>
+        </div>
+    </div>
+
+    <div class="uk-margin">
+        <button class="uk-button uk-button-primary" type="submit">Create</button>
+    </div>
+</form>
+
+<script src="{% static 'adminboard/js/admin.carousel.js' %}"></script>

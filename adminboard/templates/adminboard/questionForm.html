@@ -1,0 +1,106 @@
+{% extends 'adminboard/home.html' %}
+{% load staticfiles %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<title>Questions Submission</title>
+{% endblock %}
+
+{% block html %}
+<!-- Scenario Creation form -->
+<form class="uk-width-1-2@l uk-form-stacked" id="questionForm" method="post" action="{% url 'adminboard:questions' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <fieldset class="uk-fieldset" data-class="form-fieldset">
+        <input type="number" name="id" value="{{ id }}" hidden />
+        <legend class="uk-legend">Edit Question</legend>
+
+        <div class="uk-margin" id="assoc-div" uk-margin>
+            <label for="" class="uk-form-label">Associate Course</label>
+            <input type="text" name="course_name" class="uk-input" value="{{quest_answer.progress.course_name|safe}}" placeholder="Course XYZ" required readonly/>
+        </div>   
+
+        <div class="uk-margin" id="assoc-div" uk-margin>
+            <label for="" class="uk-form-label">Associate with Module</label>
+            <input type="text" name="module_name" class="uk-input" value="{{quest_answer.module_name|safe}}" placeholder="Module XYZ" required readonly/>
+        </div>   
+
+        <div class="uk-margin">
+            <label for="" class="uk-form-label">Question</label>
+            <div class="uk-form-controls">
+                <textarea class="uk-textarea" name="question" rows="2" placeholder="Question..." required=true>{{quest_answer.question|safe}}</textarea>
+            </div>
+        </div>   
+        
+        <div class="uk-margin" uk-margin>
+            <label for="" class="uk-form-label">Answer</label>
+            <div class="uk-form-controls">
+                <textarea class="uk-textarea answer-input" name="answer" rows="5" placeholder="Provide answer..."></textarea>
+            </div>
+        </div>
+
+        <div class="uk-margin">
+            <label for="" class="uk-form-label">Status</label>
+            <div class="uk-form-controls">
+                <select class="uk-select form_options" name="status" required=true autocomplete="off" onchange="statusChange(this)">
+                    <option value="Pending">Pending</option>
+                    <option value="Accepted">Accepted</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+            </div>
+            <sm class="uk-text-danger uk-hidden note">Please change the status</sm>
+        </div>
+
+        <div class="uk-margin uk-hidden" id="reason-div" uk-margin>
+            <label for="" class="uk-form-label">Reason for rejection</label>
+            <div class="uk-form-controls">
+                <textarea class="uk-textarea" name="rejected_remark" rows="5" placeholder="Provide rejection reason..." ></textarea>
+            </div>
+        </div>
+
+    </fieldset>
+
+    <div class="uk-margin">
+        <button type="submit" class="uk-button uk-button-primary">Submit</button>
+        <button type="button" class="uk-button uk-button-default-2" onclick="history.back()">Cancel</button>
+    </div>
+</form>
+{% endblock %}
+
+{% block loader %}{% endblock %}
+
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script src="{% static 'adminboard/js/ui.js' %}"></script>
+<script>
+    const status = document.querySelector('[name="status"]');
+    status.value="{{quest_answer.status}}";
+
+    function statusChange(e) {
+        const reasonDiv = document.querySelector('#reason-div');
+        const answerDiv = document.querySelector('.answer-input');
+
+        if(e.value === 'Rejected'){
+            answerDiv.removeAttribute('required');
+            reasonDiv.classList.remove('uk-hidden');
+            reasonDiv.setAttribute('required', 'true');
+        }else{
+            answerDiv.setAttribute('required', 'true');
+            reasonDiv.classList.add('uk-hidden');
+            reasonDiv.removeAttribute('required');
+        }
+    }
+
+    const questForm = document.querySelector('#questionForm');
+    
+    questForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (status.value === 'Pending') {
+            status.parentElement.nextElementSibling.classList.remove('uk-hidden');
+        }else {
+            status.parentElement.nextElementSibling.classList.add('uk-hidden');
+            e.target.submit();
+        }
+    });
+</script>
+{% endblock %}

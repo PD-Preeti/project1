@@ -1,0 +1,102 @@
+{% extends 'adminboard/home.html' %}
+{% load staticfiles %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.uikit.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.24/pagination/input.js"></script>
+<!-- DateRange -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<title>User Assessment</title>
+{% endblock %}
+
+{% block html %}
+<div class="submission-main">
+    <h2>User Assessment</h2>
+
+    <div class="uk-overflow-auto">
+
+        <table class="uk-table uk-table-hover uk-table-middle uk-table-divider uk-background-default" id="contributions">
+            <thead>
+                <tr>
+                    <th class="uk-table-shrink">#</th>
+                    <th class="uk-width-small">Email</th>
+                    <th class="uk-width-small">Course Name</th>
+                    <th class="uk-width-small">Question ID</th>
+                    <th class="uk-width-small">Module Linked</th>
+                    <th class="uk-width-small">Question</th>
+                    <th class="uk-width-small">Option 1</th>
+                    <th class="uk-width-small">Option 2</th>
+                    <th class="uk-width-small">Option 3</th>
+                    <th class="uk-width-small">Option 4</th>
+                    <th class="uk-width-small">Answer Given</th>
+                    <th class="uk-width-small">Is Correct</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for i in contributions %}
+                <tr>
+                    <td>{{i.id}}</td>
+                    <td class="uk-table-link" title="{{ i.person_email }}">
+                        <a class="uk-link-reset">{{ i.person_email }}</a>
+                    </td>
+                    <td class="uk-text-truncate" title="{{ i.course_name }}">{{ i.course_name }}</td>
+                    <td class="uk-text-truncate" title="{{ i.quest_id }}">{{ i.quest_id }}</td>
+                    <td class="uk-text-truncate" title="{{ i.module_linked }}">{{ i.module_linked }}</td>
+                    <td class="uk-text-truncate" title="{{ i.question }}">{{ i.question }}</td>
+                    <td class="uk-text-truncate" title="{{ i.option1 }}">{{ i.option1 }}</td>
+                    <td class="uk-text-truncate" title="{{ i.option2 }}">{{ i.option2 }}</td>
+                    <td class="uk-text-truncate" title="{{ i.option3 }}">{{ i.option3 }}</td>
+                    <td class="uk-text-truncate" title="{{ i.option4 }}">{{ i.option4 }}</td>
+                    <td class="uk-text-truncate" title="{{i.option_given}}">{{i.option_given}}</td>
+                    <td class="uk-text-truncate" title="{{i.is_correct}}">{{i.is_correct}}</td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div id="datatable_detail_wrapper"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block loader %}{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'adminboard/js/ui.js' %}"></script>
+<script>
+    $(document).ready(function() {
+    var questTable = $('#contributions').DataTable({
+        "bLengthChange": false,
+        "pagingType": "input",
+        "pageLength": 10,
+        stateSave: true,
+        stateDuration:-1,
+        dom: 'Bfrt<"#datatable_detail_wrapper" ip>',
+        buttons: [
+            {
+                extend: 'csvHtml5',
+                text: 'Export CSV',
+                exportOptions: {
+                    columns: 'th'
+                }
+            }
+        ],
+    });
+
+    // Filter Position
+    const contributionsFilter = document.querySelector('#contributions_filter');
+    const dtButtons = document.querySelector('.dt-buttons');
+    contributionsFilter.appendChild(dtButtons);
+    contributionsFilter.classList.add('uk-flex');
+});
+</script>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% load staticfiles %}
+<div class="update-box md:col-span-1">
+    <h4 class="text-2xl font-semibold ">Revision Updates</h4>
+
+    {% if courses %}
+    {% if low_conf_mod %}
+    <div class="mt-4 border rounded-lg border-gray-600">
+        <h3 class="low_conf_title font-medium px-4 py-2 border-b border-gray-600">Low Confidence Modules</h3>
+        <ul class="list--box list-disc mb-4 ml-6 px-4 py-2">
+            {% for i in low_conf_mod %}
+            <li class="list--box__item mt-4">
+                <a data-href="{% url 'employee:coursestarted' cname=i.course_name %}" 
+                    data-module="{{i.completed_module}}"
+                    onclick="revisitMods(this)"
+                    class="flex flex-col cursor-pointer text-blue-700"
+                >
+                    <span>{{i.completed_module}}</span>
+                    <em class="text-sm">({{i.course_name}})</em>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endif %}
+    {% if sc_data %}
+    <div class="mt-4 border rounded-lg border-gray-600">
+        <h3 class="low_conf_title font-medium px-4 py-2 border-b border-gray-600">Modules that needs revision</h3>
+        <ul class="list--box list-disc mb-4 ml-6 px-4 py-2">
+            {% for i in sc_data %}
+            <li class="list--box__item mt-4">
+                <a data-href="{% url 'employee:coursestarted' cname=i.1 %}"
+                    data-module="{{i.0}}"
+                    onclick="revisitMods(this)"
+                    class="flex flex-col cursor-pointer text-blue-700"
+                >
+                    <span>{{i.0}}</span>
+                    <em class="text-sm">({{i.1}})</em>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if not courses%}
+    <div class="flex flex-col items-center justify-center revision_text p-6 border border-gray-600 rounded-lg mt-4">
+        <img src="{% static 'employee/images/box-smiley.png' %}" alt="" srcset="">
+        <p class="font-medium mt-2">No Course, No Revision</p>
+    </div>
+    {% elif not low_conf_mod and not sc_data %}
+    <div class="flex flex-col items-center justify-center revision_text p-6 border border-gray-600 rounded-lg mt-4">
+        <img src="{% static 'employee/images/smiley.png' %}" alt="" srcset="">
+        <p class="font-medium mt-2">Yipiee! No Revision</p>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    const revisitMods = (e) => {
+        const getUrl = e.getAttribute('data-href'),
+              getModuleName = e.getAttribute('data-module');
+        // Store module name in localStorage
+        localStorage.setItem('revisit_module', getModuleName);
+        location.pathname = getUrl;
+        console.log(getModuleName)
+    }
+</script>

@@ -1,0 +1,125 @@
+.header{
+    user-select: none;
+    position: sticky;
+    top: 0;
+    z-index: 10000;
+    background-color: var(--custom-white-1);
+}
+
+.logo{
+    width: 32px;
+    height: 32px;
+    transform: rotate(90deg);
+}
+
+.logo-mark{
+    margin-left: .5rem;
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.nav{
+    font-size: 1rem;
+    color: var(--custom-gray-1);
+    font-weight: 500;
+}
+
+.nav-items a:hover,
+.nav-items a:focus{
+    text-decoration: none;
+    color: inherit;
+}
+
+.nav-items:nth-of-type(4),
+.nav-items:nth-of-type(5){
+    color: var(--custom-white-1);
+}
+
+.nav-items:not(:last-of-type){
+    margin-right: 2rem;
+}
+
+.nav-tag{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 12px;
+    color: var(--custom-white-1);
+}
+
+.notification{
+    background-color: var(--custom-gray-1);
+}
+
+.notification-active::after{
+    content: attr(data-value);
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    font-size: .8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--custom-red-1);
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+.user-tag{
+    background-color: var(--custom-purple-1);
+    cursor: pointer;
+}
+
+.float-card{
+    position: absolute;
+    top: 4rem;
+    right: 0rem;
+    width: 200px;
+    background-color: var(--custom-white-1);
+    color: var(--custom-gray-1);
+    border: 1px solid var(--custom-gray-1);
+    border-radius: 4px;
+    transition: all .25s ease-in-out;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.float-card::before{
+    content: '';
+    position: absolute;
+    top: -6.25px;
+    right: 10px;
+    transform: rotate(45deg);
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-top: 1px solid var(--custom-gray-1);
+    border-left: 1px solid var(--custom-gray-1);
+    background-color: var(--custom-white-1);
+}
+
+.float-card-items a{
+    display: block;
+    border-radius: 4px;
+    padding: .5rem 1rem;
+}
+
+.float-card a:hover,
+.float-card a:focus{
+    background-color: var(--custom-white-2);
+}
+
+.float-card-items:not(:last-of-type){
+    border-bottom: 1px solid var(--custom-white-2);
+}
+
+.float-card--open{
+    visibility: visible;
+    opacity: 1;
+    pointer-events: all;
+}

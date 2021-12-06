@@ -1,0 +1,237 @@
+{% extends 'adminboard/home.html' %}
+{% load staticfiles %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<title>Questions Submission</title>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.uikit.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.24/pagination/input.js"></script>
+<!-- DateRange -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script>
+    const questionData = [];
+    {% for q in quest_answer %}
+        questionData.push({
+            id: parseInt('{{ q.id }}'),
+            question: (`{{ q.question|safe }}`).replace(/\n\r?/g, '<br />'),
+            answer: (`{{ q.answer|safe }}`).replace(/\n\r?/g, '<br />'),
+            courseName: '{{ q.progress.course_name|safe }}',
+            moduleName: '{{ q.module_name|safe }}',
+            status: '{{ q.status }}',
+            personEmail: '{{ q.progress.person_email }}',
+            personName: '{{ q.progress.person_name }}',
+            rejectedRemark: (`{{ q.rejected_remark|safe }}`).replace(/\n\r?/g, '<br />')
+        });
+    {% endfor %}
+    console.log(questionData);
+</script>
+<script defer src="{% static 'adminboard/js/ui.js' %}"></script>
+<script defer>
+    $(document).ready(function() {
+        var questTable = $('#questions').DataTable({
+            "bLengthChange": false,
+            "pagingType": "input",
+            "pageLength": 10,
+            stateSave: true,
+            stateDuration:-1,
+            dom: 'Bfrt<"#datatable_detail_wrapper" ip>',
+            buttons: [
+                {
+                    extend: 'csvHtml5',
+                    text: 'Export CSV',
+                    exportOptions: {
+                        columns: 'th'
+                    }
+                }
+            ],
+            initComplete: function () {
+                const th = document.querySelectorAll('#questions > thead > tr > th');
+                this.api().columns([2,3,9]).every( function (i) {
+                    var column = this;
+                    let titleHead = [...th][i].innerHTML;
+                    var label = $('<label class="uk-form-label">'+ titleHead +'<br></label>')
+                        .appendTo( $('#filters') );
+                    var select = $('<select class="uk-select"><option value="">--select--</option></select>')
+                        .appendTo( $(label))
+                        .on( 'change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+        
+                            column
+                                .search( val ? '^'+val+'$' : '', true, false )
+                                .draw();
+                        } );
+        
+                    column.data().unique().sort().each( function ( d, j ) {
+                        select.append( '<option value="'+d+'">'+d+'</option>' )
+                    } );
+                } );
+            },
+        });
+
+        // Filter Position
+        const contributionsFilter = document.querySelector('#questions_filter');
+        const dtButtons = document.querySelector('.dt-buttons');
+        contributionsFilter.appendChild(dtButtons);
+        contributionsFilter.classList.add('uk-flex');
+    });
+</script>
+<script defer>
+    function viewQuestionDetail(id) {
+        id = parseInt(id);
+        const questionList = Object.values(questionData).find((value) => value.id === id);
+        const questionView = document.querySelector('#questionView');
+
+        if(questionList) {
+            questionView.innerHTML = '';
+            const elem = `
+                <div class="question-detail">
+                    <div class="question-detail-macro">
+                        <h5 class="question">${questionList.question}</h5>
+                        <p class="answer">${questionList.answer}</p>
+                    </div>
+                    <div class="question-detail-micro">
+                        <div class="block">
+                            <p>Course name: ${questionList.courseName}</p>
+                            <p>Module name: ${questionList.moduleName}</p>
+                            <p>Status: ${questionList.status}</p>
+                        </div>
+                        <div class="block">
+                            <p>Raised by: ${questionList.personEmail}</p>
+                        </div>
+                        ${questionList.status === 'Rejected'
+                            ? (
+                                `<div class="block-2">
+                                    <h5>Rejected remark</h5>
+                                    <p>${questionList.rejectedRemark}</p>
+                                </div>`
+                            ) : ""
+                        }
+                    </div>
+                </div>
+            `;
+
+            questionView.innerHTML += elem;
+        }
+    }
+</script>
+{% endblock %}
+
+{% block html %}
+<div class="submission-main">
+    <h2>Question Submission </h2>
+
+    <ul uk-accordion>
+        <li class="uk-card uk-background-default uk-padding-small">
+            <a class="uk-accordion-title" href="#">Filters</a>
+            <div class="uk-accordion-content">
+                <div id="filters" class="uk-flex uk-flex-middle uk-flex-center uk-margin-bottom"></div>
+                <!-- <form method="post" action="{% url 'adminboard:filterpeople' %}" id="dateRange">{% csrf_token %}
+                    <div>
+                        <label for="" class="uk-form-label">Expiration Date-Range</label>
+                        <div id="date_filter" class="uk-flex uk-width-1-2 uk-margin-bottom">
+                            <input type="text" class="uk-input date_range_filter" name="datepicker">
+                        </div>
+                    </div>
+                </form> -->
+            </div>
+        </li>
+    </ul>
+
+    <div class="uk-overflow-auto">
+
+        <table class="uk-table uk-table-hover uk-table-middle uk-table-divider uk-background-default" id="questions">
+            <thead>
+                <tr>
+                    <th class="uk-table-shrink">#</th>
+                    <th class="uk-width-small uk-text-nowrap close">Question <i class="fas fa-sort"></i></th>
+                    <th class="uk-width-small uk-text-nowrap close">Course Name <i class="fas fa-sort"></i></th>
+                    <th class="uk-width-small uk-text-nowrap close">Module Linked <i class="fas fa-sort"></i></th>
+                    <th class="uk-width-small uk-text-nowrap close">Submitted Date (IST) <i class="fas fa-sort"></i></th>
+                    <th class="uk-width-small uk-text-nowrap close">Email <i class="fas fa-sort"></i></th>
+                    <th class="uk-width-small uk-text-nowrap close uk-hidden">1st Level Manager <i class="fas fa-sort"></i></th>
+                    <th class="uk-width-small uk-text-nowrap close">Team <i class="fas fa-sort"></i></th>
+                    <th class="uk-width-small uk-text-nowrap close">Location <i class="fas fa-sort"></i></th>
+                    <th class="uk-width-small uk-text-nowrap close">Status <i class="fas fa-sort"></i></th>
+                    <th class="uk-width-small uk-text-nowrap">Rejected reason</th>
+                    <th class="uk-width-small uk-text-nowrap">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for q in quest_answer %}
+            <tr>
+                <td>{{ q.id }}</td>
+                <td class="uk-table-link uk-text-truncate" title="{{ q.question }}">{{ q.question }}</td>
+                <td class="uk-text-truncate" title="{{ q.progress.course_name }}">{{ q.progress.course_name }}</td>
+                <td class="uk-text-truncate" title="{{ q.module_name }}">{{ q.module_name }}</td>
+                <td class="uk-text-truncate" title="{{ q.created_date|date }}">{{ q.created_date|date }}</td>
+                <td class="uk-text-truncate" title="{{ q.progress.person_email }}">{{ q.progress.person_email }}</td>
+                <td class="uk-text-truncate uk-hidden" title="{{ q.progress.person_firstlevel }}">{{ q.progress.person_firstlevel }}</td>
+                <td class="uk-text-truncate" title="{{ q.progress.person_team }}">{{ q.progress.person_team }}</td>
+                <td class="uk-text-truncate" title="{{ q.progress.person_location }}">{{ q.progress.person_location }}</td>
+                <td 
+                    class="uk-text-truncate
+                        {% if q.status == 'Pending' %}
+                        uk-text-warning
+                        {% elif q.status == 'Accepted' %}
+                        uk-text-success
+                        {% else %}
+                        uk-text-danger
+                        {% endif %}
+                    " 
+                    title=""
+                >
+                    {{ q.status }}
+                </td>
+                <td class="uk-text-truncate" title="">
+                    {% if q.rejected_remark == '' or q.rejected_remark == None %}
+                        N.A.
+                    {% else %}
+                        {{ q.rejected_remark }}
+                    {% endif %}
+                </td>
+                <td class="custom-action">
+                    {% if q.status == "Pending" %}
+                    <a href="{% url 'adminboard:questionsForm' id=q.id %}" title="Edit"><i class="far fa-edit"></i></a>
+                    {% endif %}
+                    <a onclick="viewQuestionDetail('{{q.id}}')" title="View Detail" uk-toggle="target: .view-question"><i class="fas fa-tv"></i></a>
+                    <!-- <a href="" title="Hide/Unhide"><i class="far fa-eye"></i></a> -->
+                </td>
+                
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div id="datatable_detail_wrapper"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block loader %}
+<section class="view-question custom-model" hidden>
+    <div class="uk-width-1-2 uk-margin-auto custom-model__div">
+        <div class="uk-margin">
+            <div class="uk-flex">
+                <label for="" class="label uk-flex-1" style="color: #888">Question View</label>
+                <span uk-icon="icon: close" class="close" title="close" uk-toggle="target: .view-question"></span>
+            </div>
+            <hr class="divider">
+            <div class="uk-list uk-list-divider" id="questionView">
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

@@ -1,0 +1,74 @@
+/* Media Query */
+@media (max-width: 1230px){
+    .padding{
+        padding: 40px;
+    }    
+
+    .details-padding{
+        padding: 15px;
+    }
+}
+
+@media (max-width: 760px){
+    .navbar{
+        display: none;
+    }
+
+    .emp-login{
+        background-position: unset;
+    }
+
+    .second_sect{
+        display: none;
+    }
+
+    .emp-login__h1{
+        text-align: center;
+        font-size: 2rem;
+    }
+
+    .aeroplane{
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .emp-login__button{
+        width: 12rem;
+        font-size: .8rem;
+    }
+    
+    .course-layout{
+        grid-template-columns: 1fr;
+    }
+
+    .grid-container-m{
+        grid-template-columns: 1fr;
+    }
+
+    .container-sidebar{
+        display: none;
+    }
+
+    .contain{
+        order: 2;
+    }
+    
+    .side-contain{
+        order: 1;
+    }
+
+    .start-button{
+        width: 80%;
+    }
+
+    /* 404 */
+    .notfound .notfound-404 {
+        width: 110px;
+        height: 110px;
+    }
+    .notfound {
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 110px;
+    }
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="author" content="Dataflow group">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <link rel="shortcut icon" href="{% static 'adminboard/images/DFLogo.svg' %}" type="image/x-icon">
+    <link rel="preload" href="{% static 'adminboard/images/lms-bg.jpg'%}" as="image">
+
+    <!-- UIkit CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.2.7/dist/css/uikit.min.css" />
+    <link rel="stylesheet" href="{% static 'adminboard/css/uikit.min.css' %}" />
+
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="{% static 'adminboard/css/main.css' %}">
+    <title>Admin Login</title>
+</head>
+<body>
+    <section class="uk-flex login-sect relative">
+        <div class="uk-flex-1 login-sect__div">
+            <div class="uk-position-top uk-text-left uk-flex uk-flex-middle login-header">
+                <img src="{% static 'adminboard/images/DFLogo.svg' %}" alt="" srcset="" class="pr">
+                <span class="logo-span">DATAFLOW</span>
+            </div>
+            <div class="login-box">
+                <span class="login-title-above">Welcome to</span>
+                <span class="login-title">boardroom</span>
+                <a href="{% url 'social:begin' 'google-oauth2' %}" class="uk-button uk-button-default uk-button-large uk-margin-top"><span uk-icon="icon: google; ratio: 1" class="pr"></span> Sign-in with Google</a>
+            </div>
+            <footer class="uk-position-bottom uk-text-left login-footer">&copy; 2020 DATA<span class="foot-span">FLOW</span> GROUP</footer>
+        </div>
+        <div class="login-sect__div flex-2">
+            <a href="{% url 'adminboard:loginadminuser' %}" style="position:absolute; right:320px; top:83px; width:13px; z-index:10; text-decoration:none; color:#5c0a33; opacity: 0;">H</a>
+            <div class="uk-background-cover uk-height-medium uk-panel uk-flex uk-flex-center uk-flex-middle" 
+                style="background-image: url('{% static 'adminboard/images/lms-bg.jpg'%}'); width: 100%; height: 100%;">
+            </div>
+        </div>
+    </section>
+    
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.7/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.7/dist/js/uikit-icons.min.js"></script>
+
+    <!-- Script -->
+    <script src="{% static 'adminboard/js/ui.js' %}"></script>
+</body>
+</html>

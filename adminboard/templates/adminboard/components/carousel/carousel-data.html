@@ -1,0 +1,50 @@
+<table class="uk-table uk-table-hover uk-table-middle uk-table-divider uk-background-default" id="carouselData">
+    <thead>
+        <tr>
+            <th class="uk-table-shrink">#</th>
+            <th class="uk-table-shrink">Title</th>
+            <th class="uk-width-small">Description</th>
+            <th class="uk-width-small">Course</th>
+            <th class="uk-width-small">Cover</th>
+            <th class="uk-width-small">Link</th>
+            <th class="uk-width-small">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if carousels %}
+        {% for i in carousels %}
+        <tr>
+            <td>{{i.id}}</td>
+            <td class="uk-table-link" title="{{ i.carousel_title }}">
+                <a class="uk-link-reset">{{ i.carousel_title }}</a>
+            </td>
+            <td class="uk-text-truncate" title="{{ i.carousel_description }}">{{ i.carousel_description }}</td>
+            <td class="uk-text-truncate" title="{{ i.carousel_course }}">{{ i.carousel_course }}</td>
+            {% if i.carousel_cover %}
+            <td class="uk-text-truncate" title="{{ i.carousel_cover }}"><img src="{{ i.carousel_cover.url }}" alt="" width="100px" height="100px" style="object-fit: contain;"></td>
+            {% else %}
+            <td class="uk-text-truncate"></td>
+            {% endif %}
+            <td class="uk-text-truncate" title="{{i.carousel_link}}">{{i.carousel_link}}</td>
+            <td class="uk-text-truncate">
+                <a title="delete"
+                    uk-toggle="target: .deleteEntry__{{i.id}}; animation:  uk-animation-slide-left, uk-animation-slide-bottom"
+                    animation="true"
+                    duration="200"
+                ><i class="far fa-trash-alt"></i></a>
+                <!-- Revoke Confirmation Div -->
+                <div class="uk-position-absolute uk-padding-small uk-card uk-card-default uk-position-z-index deleteEntry__{{i.id}}" style="width: 200px; right: 4rem" hidden>
+                    <p class="whitespace-wrap">Are you sure you want to delete this entry?</p>
+                    <a href="{% url 'adminboard:delCarousel' id=i.id %}" class="uk-button uk-button-danger deleteEntry">Yes</a>
+                    <a class="uk-button uk-button-default-2"
+                        uk-toggle="target: .deleteEntry__{{i.id}}; animation:  uk-animation-slide-left, uk-animation-slide-bottom"
+                        animation="true"
+                        duration="200"
+                    >No</a>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </tbody>
+</table>

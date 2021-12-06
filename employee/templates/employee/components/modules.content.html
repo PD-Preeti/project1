@@ -1,0 +1,227 @@
+{% for k in extension %}
+{% if i.module.module_name == k.0 %}
+    <!-- File 1 -->
+    {% if k.1 == 'pdf' %}
+    <div class="slide uk-flex uk-flex-column container__elem" data-type="pdf" data-url="{{i.module.file1.url}}">
+        <p class="text-lg font-medium slide-loader">Loading...</p>
+    </div>
+    {% else %}
+    <div class="uk-margin-top media container__elem" data-type="mp4">
+        <video class="module_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%" style="min-height: calc(100vh - 400px);" nodownload>
+            <source src="/media/{{ i.module.file1 }}" type="video/mp4">
+        </video>
+    </div>
+    {% endif %}
+
+    <!-- File 2 -->
+    {% if i.module.file2 %}
+    {% if k.2 == 'pdf' %}
+    <div class="slide uk-flex uk-flex-column container__elem uk-hidden" data-type="pdf" data-url="{{i.module.file2.url}}">
+        <p class="text-lg font-medium slide-loader">Loading...</p>
+    </div>
+    {% else %}
+    <div class="uk-margin-top media container__elem uk-hidden" data-type="mp4">
+        <video class="module_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%" style="min-height: calc(100vh - 400px);" nodownload>
+            <source src="/media/{{ i.module.file2 }}" type="video/mp4">
+        </video>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- File 3 -->
+    {% if i.module.video_file %}
+    {% if k.3 == 'pdf' %}
+    <div class="slide uk-flex uk-flex-column container__elem uk-hidden" data-type="pdf" data-url="{{i.module.video_file.url}}">
+        <p class="text-lg font-medium slide-loader">Loading...</p>
+    </div>
+    {% else %}
+    <div class="uk-margin-top media container__elem uk-hidden" data-type="mp4">
+        <video class="module_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%" style="min-height: calc(100vh - 400px);" nodownload>
+            <source src="/media/{{ i.module.video_file }}" type="video/mp4">
+        </video>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- File 4 -->
+    {% if i.module.file3 %}
+    {% if k.4 == 'pdf' %}
+    <div class="slide uk-flex uk-flex-column container__elem uk-hidden" data-type="pdf" data-url="{{i.module.file3.url}}">
+        <p class="text-lg font-medium slide-loader">Loading...</p>
+    </div>
+    {% else %}
+    <div class="uk-margin-top media container__elem uk-hidden" data-type="mp4">
+        <video class="module_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%" style="min-height: calc(100vh - 400px);" nodownload>
+            <source src="/media/{{ i.module.file3 }}" type="video/mp4">
+        </video>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- File 5 -->
+    {% if i.module.file4 %}
+    {% if k.5 == 'pdf' %}
+    <div class="slide uk-flex uk-flex-column container__elem uk-hidden" data-type="pdf" data-url="{{i.module.file4.url}}">
+        <p class="text-lg font-medium slide-loader">Loading...</p>
+    </div>
+    {% else %}
+    <div class="uk-margin-top media container__elem uk-hidden" data-type="mp4">
+        <video class="module_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%" style="min-height: calc(100vh - 400px);" nodownload>
+            <source src="/media/{{ i.module.file4 }}" type="video/mp4">
+        </video>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- File 6 -->
+    {% if i.module.file5 %}
+    {% if k.6 == 'pdf' %}
+    <div class="slide uk-flex uk-flex-column container__elem uk-hidden" data-type="pdf" data-url="{{i.module.file5.url}}">
+        <p class="text-lg font-medium slide-loader">Loading...</p>
+    </div>
+    {% else %}
+    <div class="uk-margin-top media container__elem uk-hidden" data-type="mp4">
+        <video class="module_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%" style="min-height: calc(100vh - 400px);" nodownload>
+            <source src="/media/{{ i.module.file5 }}" type="video/mp4">
+        </video>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- File 7 -->
+    {% if i.module.file6 %}
+    {% if k.7 == 'pdf' %}
+    <div class="slide uk-flex uk-flex-column container__elem uk-hidden" data-type="pdf" data-url="{{i.module.file6.url}}">
+        <p class="text-lg font-medium slide-loader">Loading...</p>
+    </div>
+    {% else %}
+    <div class="uk-margin-top media container__elem uk-hidden" data-type="mp4">
+        <video class="module_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%" style="min-height: calc(100vh - 400px);" nodownload>
+            <source src="/media/{{ i.module.file6 }}" type="video/mp4">
+        </video>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- File 8 -->
+    {% if i.module.file7 %}
+    {% if k.8 == 'pdf' %}
+    <div class="slide uk-flex uk-flex-column container__elem uk-hidden" data-type="pdf" data-url="{{i.module.file7.url}}">
+        <p class="text-lg font-medium slide-loader">Loading...</p>
+    </div>
+    {% else %}
+    <div class="uk-margin-top media container__elem uk-hidden" data-type="mp4">
+        <video class="module_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%" style="min-height: calc(100vh - 400px);" nodownload>
+            <source src="/media/{{ i.module.file7 }}" type="video/mp4">
+        </video>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- File 9 -->
+    {% if i.module.file8 %}
+    {% if k.9 == 'pdf' %}
+    <div class="slide uk-flex uk-flex-column container__elem uk-hidden" data-type="pdf" data-url="{{i.module.file8.url}}">
+        <p class="text-lg font-medium slide-loader">Loading...</p>
+    </div>
+    {% else %}
+    <div class="uk-margin-top media container__elem uk-hidden" data-type="mp4">
+        <video class="module_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%" style="min-height: calc(100vh - 400px);" nodownload>
+            <source src="/media/{{ i.module.file8 }}" type="video/mp4">
+        </video>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- File 10 -->
+    {% if i.module.file9 %}
+    {% if k.10 == 'pdf' %}
+    <div class="slide uk-flex uk-flex-column container__elem uk-hidden" data-type="pdf" data-url="{{i.module.file9.url}}">
+        <p class="text-lg font-medium slide-loader">Loading...</p>
+    </div>
+    {% else %}
+    <div class="uk-margin-top media container__elem uk-hidden" data-type="mp4">
+        <video class="module_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%" style="min-height: calc(100vh - 400px);" nodownload>
+            <source src="/media/{{ i.module.file9 }}" type="video/mp4">
+        </video>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- File 11 -->
+    {% if i.module.file10 %}
+    {% if k.11 == 'pdf' %}
+    <div class="slide uk-flex uk-flex-column container__elem uk-hidden" data-type="pdf" data-url="{{i.module.file10.url}}">
+        <p class="text-lg font-medium slide-loader">Loading...</p>
+    </div>
+    {% else %}
+    <div class="uk-margin-top media container__elem uk-hidden" data-type="mp4">
+        <video class="module_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%" style="min-height: calc(100vh - 400px);" nodownload>
+            <source src="/media/{{ i.module.file10 }}" type="video/mp4">
+        </video>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- File 12 -->
+    {% if i.module.file11 %}
+    {% if k.12 == 'pdf' %}
+    <div class="slide uk-flex uk-flex-column container__elem uk-hidden" data-type="pdf" data-url="{{i.module.file11.url}}">
+        <p class="text-lg font-medium slide-loader">Loading...</p>
+    </div>
+    {% else %}
+    <div class="uk-margin-top media container__elem uk-hidden" data-type="mp4">
+        <video class="module_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%" style="min-height: calc(100vh - 400px);" nodownload>
+            <source src="/media/{{ i.module.file11 }}" type="video/mp4">
+        </video>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- File 13 -->
+    {% if i.module.file12 %}
+    {% if k.13 == 'pdf' %}
+    <div class="slide uk-flex uk-flex-column container__elem uk-hidden" data-type="pdf" data-url="{{i.module.file12.url}}">
+        <p class="text-lg font-medium slide-loader">Loading...</p>
+    </div>
+    {% else %}
+    <div class="uk-margin-top media container__elem uk-hidden" data-type="mp4">
+        <video class="module_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%" style="min-height: calc(100vh - 400px);" nodownload>
+            <source src="/media/{{ i.module.file12 }}" type="video/mp4">
+        </video>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- File 14 -->
+    {% if i.module.file13 %}
+    {% if k.14 == 'pdf' %}
+    <div class="slide uk-flex uk-flex-column container__elem uk-hidden" data-type="pdf" data-url="{{i.module.file13.url}}">
+        <p class="text-lg font-medium slide-loader">Loading...</p>
+    </div>
+    {% else %}
+    <div class="uk-margin-top media container__elem uk-hidden" data-type="mp4">
+        <video class="module_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%" style="min-height: calc(100vh - 400px);" nodownload>
+            <source src="/media/{{ i.module.file13 }}" type="video/mp4">
+        </video>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <!-- File 15 -->
+    {% if i.module.file14 %}
+    {% if k.15 == 'pdf' %}
+    <div class="slide uk-flex uk-flex-column container__elem uk-hidden" data-type="pdf" data-url="{{i.module.file14.url}}">
+        <p class="text-lg font-medium slide-loader">Loading...</p>
+    </div>
+    {% else %}
+    <div class="uk-margin-top media container__elem uk-hidden" data-type="mp4">
+        <video class="module_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%" style="min-height: calc(100vh - 400px);" nodownload>
+            <source src="/media/{{ i.module.file14 }}" type="video/mp4">
+        </video>
+    </div>
+    {% endif %}
+    {% endif %}
+
+{% endif %}
+{% endfor %}

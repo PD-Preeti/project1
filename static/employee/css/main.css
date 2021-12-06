@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700&display=swap');
+
+@import './comps/_login.css';
+@import './comps/_header.css';
+@import './comps/_component.css';
+@import './comps/_rating.css';
+@import './comps/_courseStart.css';
+@import './comps/_panel.css';
+
+:root{
+    --custom-background-1: #1E2023;
+    --custom-black-1: #000;
+    --custom-gray-1: #444;
+    --custom-gray-2: #ccc;
+    --custom-gray-3: #ddd;
+    --custom-white-1: #f7f7f7;
+    --custom-white-2: #e9e7ea;
+    --custom-white-3: #e8eff1;
+    --custom-red-1: #F96363;
+    --custom-red-2: #f42121;
+    --custom-purple-1: #A200FF;
+    --custom-blue-1: #0066ff;
+    --custom-green-1: #48bb78;
+    --custom-green-2: #007731;
+    --custom-yellow-1: #f8ce0b;
+    --custom-shadow-1:  rgba(0, 102, 255, .5);
+    --custom-shadow-2:  rgba(34, 34, 34, .5);
+    --custom-shadow-3:  rgba(249, 99, 99, .5);
+    --custom-shadow-4:  rgba(72, 187, 120, .5);
+    --custom-orange-1: #F3890F;
+
+    --custom-height-sm: 5rem;
+    --custom-width-min: 480px;
+    --custom-width-max: 1180px;
+
+    --custom-text-lg: 1.2rem;
+}
+
+*{
+    font-family: 'Poppins', sans-serif;
+    user-select: none;
+}
+
+html,
+body{
+    font-size: 14px;
+    background-color: var(--custom-white-1);
+}
+
+#notfound{
+    width: 100%;
+    min-height: calc(100vh - 70px - 4rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+@media print{
+    * {
+         display: none; 
+    }
+}
+
+.padding{
+    padding: 2rem 4rem;
+}

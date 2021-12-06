@@ -1,0 +1,163 @@
+{% extends 'adminboard/home.html' %}
+{% load staticfiles %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'adminboard/css/chosen.min.css' %}">
+<title>Upload Case Studies</title>
+{% endblock %}
+
+{% block html %}
+
+<!-- Scenario Creation form -->
+<form class="uk-width-1-2@l uk-form-stacked" id="caseBulkForm" method="post" action="{% url 'adminboard:postscenario' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <fieldset class="uk-fieldset" data-class="form-fieldset">
+
+        <legend class="uk-legend">Scenario Creation</legend>
+
+        <div class="uk-margin" id="assoc-div" uk-margin>
+            <label for="" class="uk-form-label">Associate with Module</label>
+            <div class="uk-form-controls" id="assoc-modules">
+                <div id="assoc_output"></div>
+                <select data-placeholder="add modules..." name="assoc[]" multiple class="chosen-select uk-select dis assoc-select" id="assoc-select" required>
+                    {% for i in modules %}
+                    <option value="{{ i.module_name }}">{{ i.module_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>   
+
+        <div class="uk-margin">
+            <label for="" class="uk-form-label">Enter Scenario</label>
+            <div class="uk-form-controls">
+                <textarea class="uk-textarea" name="scenario" rows="5" placeholder="Scenario..." required=true></textarea>
+            </div>
+        </div>        
+
+        <div class="uk-flex uk-margin" uk-margin>
+            <div class="uk-flex-1 uk-margin-right" >
+                <label for="" class="uk-form-label">Option 1</label>
+                <div class="uk-form-controls">
+                    <input class="uk-input form_options" name="option1" placeholder="first" required=true autocomplete="off">
+                </div>
+            </div>
+
+            <div class="uk-flex-1" >
+                <label for="" class="uk-form-label">Option 2</label>
+                <div class="uk-form-controls">
+                    <input class="uk-input form_options" name="option2" placeholder="second" required=true autocomplete="off">
+                </div>
+            </div>
+        </div>
+
+        <div class="uk-flex uk-margin" uk-margin>    
+            <div class="uk-flex-1 uk-margin-right" uk-margin>
+                <label for="" class="uk-form-label">Option 3</label>
+                <div class="uk-form-controls">
+                    <input class="uk-input form_options" name="option3" placeholder="third" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="uk-flex-1" uk-margin>
+                <label for="" class="uk-form-label">Option 4</label>
+                <div class="uk-form-controls">
+                    <input class="uk-input form_options" name="option4" placeholder="fourth" autocomplete="off">
+                </div>
+            </div>
+        </div>
+
+        <div class="uk-flex uk-margin" uk-margin>
+            <div class="uk-flex-1 uk-margin-right" uk-margin>
+                <label for="" class="uk-form-label">Correct Option</label>
+                <div class="uk-form-controls">
+                    <!-- <input class="uk-input" name="correct" placeholder="second" required=true autocomplete="off"> -->
+                    <select name="correct" class="uk-select" id="correct_opt" required=true autocomplete="off">
+                        <option value="" hidden>--correct option--</option>
+                        {% if scenario %}
+                        <option value="{{scenario.option1}}">{{scenario.option1}}</option>
+                        <option value="{{scenario.option2}}">{{scenario.option2}}</option>
+                        <option value="{{scenario.option3}}">{{scenario.option3}}</option>
+                        <option value="{{scenario.option4}}">{{scenario.option4}}</option>
+                        {% else %}
+                        <option value="" data-id="option1">None</option>
+                        <option value="" data-id="option2">None</option>
+                        <option value="" data-id="option3">None</option>
+                        <option value="" data-id="option4">None</option>
+                        {% endif %}
+                    </select>
+                </div>
+            </div>
+            <div class="uk-flex-1" uk-margin uk-form-custom="target: true">
+                <label for="" class="uk-form-label">Optional Media (.mp4, .jpg, .png, .mp3 only)</label>
+                <input type="file" name="scenario__media" accept=".mp4, .jpg, .jpeg, .png, .mp3">
+                <input class="uk-input elem-disabled scenario_file_text" type="text" placeholder="Select Media..." disabled>
+                <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+            </div>
+        </div>
+
+        <div class="uk-margin">
+            <label for="" class="uk-form-label">Provide Reason</label>
+            <div class="uk-form-controls">
+                <textarea class="uk-textarea" name="reason" rows="3" placeholder="Reason..." required=true></textarea>
+            </div>
+        </div>  
+
+    </fieldset>
+
+    <div class="uk-margin">
+        {% if scenario %}
+        <input type="text" class="uk-hidden" name="id" value="{{scenario.id}}">
+        <button class="uk-button uk-button-primary" name="update">Update</button>
+        <button type="button" class="uk-button uk-button-default-2" onclick="history.back()">Cancel</button>
+        {% else %}
+        <button class="uk-button uk-button-primary" name="submit">Submit</button>
+        {% endif %}
+    </div>
+</form>
+{% endblock %}
+
+{% block loader %}{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+<script src="{% static 'adminboard/js/form.js' %}"></script>
+<script src="{% static 'adminboard/js/ui.js' %}"></script>
+<script>
+    document.getElementById('assoc_output').innerHTML = location.search;
+    $("#assoc-select").chosen();
+
+    // Edit Scenario
+    {% if scenario %}
+        const scenario = document.querySelector('[name="scenario"]'),
+              option1 = document.querySelector('[name="option1"]'),
+              option2 = document.querySelector('[name="option2"]'),
+              option3 = document.querySelector('[name="option3"]'),
+              option4 = document.querySelector('[name="option4"]'),
+              correct = document.querySelector('[name="correct"]'),
+              reason = document.querySelector('[name="reason"]'),
+              scenarioFileText = document.querySelector('.scenario_file_text');
+
+        // Set Values
+        scenario.value = '{{scenario.scenario_desc|safe}}';
+        option1.value = '{{scenario.option1|safe}}';
+        option2.value = '{{scenario.option2|safe}}';
+        option3.value = '{{scenario.option3|safe}}';
+        option4.value = '{{scenario.option4|safe}}';
+        correct.value = '{{scenario.correctoption|safe}}';
+        reason.value = '{{scenario.reason|safe}}';
+        {% if scenario.scenario_file %}
+        scenarioFileText.textContent = `{{scenario.scenario_file}}`;
+        {% endif %}
+        // For modules
+        const mods = [];
+        {% for i in modules_in_sc %}
+            mods.push(`{{i|safe}}`);
+        {% endfor %}
+
+        $('#assoc-select').val(mods)
+        $('#assoc-select').trigger("chosen:updated");
+
+    {% endif %}
+</script>
+{% endblock %}

@@ -1,0 +1,475 @@
+{% extends 'employee/home.html' %}
+{% load staticfiles %}
+
+{% block title %}{{ course_name }}{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.2.7/dist/css/uikit.min.css" />
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+
+<style>
+    *{
+        font-size: 14px;
+    }
+</style>
+{% endblock %}    
+
+{% block hero %}{% endblock %}
+
+{% block body %}
+<section class="px-16 py-12 relative" style="min-height: calc(100vh - 70px);">
+    {% if course_status != 'deleted' and teststart_status == False %}
+    <aside class="sidebar flex flex-col">
+        <div class="sidebar--container" style="flex: 2;">
+            <ul class="uk-tab-right side-tab__list" id="side-tab__list" uk-tab="connect: #component-tab-right; animation: uk-animation-fade">
+                {% for i in course %}
+                <li class="uk-flex uk-flex-middle"  title="" data-item="list-item">
+                    <a data-id="{{ i.module.module_name }}" >{{ i.module.module_name }}</a>
+                    <input type="checkbox" class="uk-checkbox course-complete uk-hidden" readonly tab-index="-1">
+                </li>
+                {% endfor %}
+                {% for q in course_and_quest %}
+                    {% if q.0 == course_name %}
+                        {% if q.1 != 0 %}
+                            {% if q.2 != 0 %}
+                            {% if total_mod_count == completed_mod_count %}
+                            <li>
+                                <a href="">Final Quest</a>
+                            </li>
+                            {% endif %}
+                            {% else %}
+                            {% if total_mod_count == completed_mod_count %}
+                            <li>
+                                <a href="">Course Completed</a>
+                            </li>
+                            {% endif %}
+                            {% endif %}
+                        {% elif q.1 == 0 %}
+                            {% if total_mod_count == completed_mod_count %}
+                            <li>
+                                <a href="">Course Completed</a>
+                            </li>
+                            {% endif %}
+                        {% endif %}
+                {% endif %}
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="sidebar--container flex-1">
+            <h3 class="py-2"><i class="fas fa-caret-right mr-2"></i>Reference Links</h3>
+            {% for i in course %}
+                <ul data-class="{{i.module.module_name}}" class="references uk-hidden">
+                    {% if i.module.link1 %}
+                    <li class="link-items"><a href="{{i.module.link1}}" target="_blank"><span uk-icon="icon: link"></span>{{i.module.module_name}} Link - 1</a></li>
+                    {% endif %}
+                    {% if i.module.link2 %}
+                    <li class="link-items"><a href="{{i.module.link2}}" target="_blank"><span uk-icon="icon: link"></span>{{i.module.module_name}} Link - 2</a></li>
+                    {% endif %}
+                    {% if i.module.link3 %}
+                    <li class="link-items"><a href="{{i.module.link3}}" target="_blank"><span uk-icon="icon: link"></span>{{i.module.module_name}} Link - 3</a></li>
+                    {% endif %}
+                    {% if i.module.link4 %}
+                    <li class="link-items"><a href="{{i.module.link4}}" target="_blank"><span uk-icon="icon: link"></span>{{i.module.module_name}} Link - 4</a></li>
+                    {% endif %}
+                    {% if i.module.link5 %}
+                    <li class="link-items"><a href="{{i.module.link5}}" target="_blank"><span uk-icon="icon: link"></span>{{i.module.module_name}} Link - 5</a></li>
+                    {% endif %}
+                    {% if i.module.link6 %}
+                    <li class="link-items"><a href="{{i.module.link6}}" target="_blank"><span uk-icon="icon: link"></span>{{i.module.module_name}} Link - 6</a></li>
+                    {% endif %}
+                    {% if i.module.link7 %}
+                    <li class="link-items"><a href="{{i.module.link7}}" target="_blank"><span uk-icon="icon: link"></span>{{i.module.module_name}} Link - 7</a></li>
+                    {% endif %}
+                    {% if i.module.link8 %}
+                    <li class="link-items"><a href="{{i.module.link8}}" target="_blank"><span uk-icon="icon: link"></span>{{i.module.module_name}} Link - 8</a></li>
+                    {% endif %}
+                    {% if i.module.link9 %}
+                    <li class="link-items"><a href="{{i.module.link9}}" target="_blank"><span uk-icon="icon: link"></span>{{i.module.module_name}} Link - 9</a></li>
+                    {% endif %}
+                    {% if i.module.link10 %}
+                    <li class="link-items"><a href="{{i.module.link10}}" target="_blank"><span uk-icon="icon: link"></span>{{i.module.module_name}} Link - 10</a></li>
+                    {% endif %}
+                </ul>
+            {% endfor %}
+        </div>
+    </aside>
+
+    <section class="content-main">
+        <button class="openbtn text-lg font-semibold" onclick="toggleNav(this)" data-toggle="false"><i class="far fa-caret-square-up mr-2" style="transform: rotate(90deg);"></i></button> 
+        
+        <div class="content-container" id="courseLayout">
+            <ul id="component-tab-right" class="uk-switcher render-mod">
+                {% for i in course %}
+                <li class="tab-panel" data-id="{{i.module.module_name}}">
+                    <div class="modules" data-id="modules__{{ forloop }}">
+                        <div class="title-head">
+                            <h2 class="module-name text-2xl font-semibold">{{ i.module.module_name }}</h2>
+                            <hr class="uk-divider-icon">
+                        </div>
+    
+                        <div class="container" data-id="container__{{forloop.counter0}}">
+                            {% include 'employee/components/modules.content.html' %}
+    
+                            {% if scenarios %}
+                            {% for j in scenarios %}
+                            {% if i.module.module_name == j.associated_module %}
+                            <div class="uk-flex uk-flex-column container__elem  uk-hidden">
+                                <form action="" method="post" class="scenario" data-id="{{ j.associated_module }}__{{forloop.counter0}}" data-assoc="{{ j.associated_module }}">{% csrf_token %}
+                                    <fieldset class="uk-fieldset scenario-fieldset">
+    
+                                        <div class="uk-margin uk-flex uk-flex-middle">
+                                            <h3 class="scenario-head text-xl font-medium uk-flex-1">Scenario.</h3>
+                                        </div>
+    
+                                        <div class="uk-margin scenario-desc">
+                                            <p>{{ j.scenario_desc }}</p>
+    
+                                            <input type="number" name="sId" value="{{j.id}}" class="uk-hidden">
+                                            <input type="text" name="cname" value="{{course_name}}" class="uk-hidden">
+                                            <input type="text" name="mname" value="{{i.module.module_name}}" class="uk-hidden">
+    
+                                            {% if j.scenario_file %}
+                                                {% for k in extension2 %}
+                                                    {% if i.module.module_name == k.0 %}
+                                                        {% if k.1 == 'mp4' %}
+                                                        <video class="scenario_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="100%">
+                                                            <source src="/media/{{j.scenario_file}}" type="video/mp4">
+                                                        </video>
+                                                        {% elif k.1 == 'mp3' %}
+                                                        <audio class="scenario_media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="audio">
+                                                            <source src="/media/{{j.scenario_file}}" type="audio/mpeg">
+                                                        </audio>
+                                                        {% else %}
+                                                        <img class="scenario_media" data="/media/{{j.scenario_file}}" alt="img" width="300px" height="300px">
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+    
+                                            <p class="uk-margin">Based on scenario choose a correct options</p>
+                                        </div><br>
+    
+                                        <div class="uk-margin">
+                                            <ul class="uk-list uk-list-large uk-list-divider sc_option" data-id="sc_option__{{j.id}}">
+                                                <li class="cursor-pointer">
+                                                <label class="radio">
+                                                    <input type="radio" name="sOpt" class="sOpt optBtn" value="{{j.option1}}" required>
+                                                    <span class="label"></span>{{j.option1}}
+                                                </label>
+                                                </li>
+                                                <li class="cursor-pointer">
+                                                    <label class="radio">
+                                                        <input type="radio" name="sOpt" class="sOpt optBtn" value="{{j.option2}}">
+                                                        <span class="label"></span>{{j.option2}}
+                                                    </label>
+                                                </li>
+                                                {% if j.option3 %}
+                                                <li class="cursor-pointer">
+                                                    <label class="radio">
+                                                        <input type="radio" name="sOpt" class="sOpt optBtn" value="{{j.option3}}">
+                                                        <span class="label"></span>{{j.option3}}
+                                                    </label>
+                                                </li>
+                                                {% endif %}
+                                                {% if j.option4 %}
+                                                <li class="cursor-pointer">
+                                                    <label class="radio">
+                                                        <input type="radio" name="sOpt" class="sOpt optBtn" value="{{j.option4}}">
+                                                        <span class="label"></span>{{j.option4}}
+                                                    </label>
+                                                </li>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                    </fieldset>
+    
+    
+                                    <div class="uk-margin submit-button" data-stat="submit__{{j.id}}">
+                                        <button type="submit" class="btn--primary px-4 py-2">
+                                            Confirm Answer
+                                        </button>
+                                    </div>
+    
+    
+                                    <div class="uk-alert-primary answer uk-hidden rounded-lg" data-stat="answer__{{j.id}}" uk-alert>
+                                        <div class="mb-4">
+                                            <strong>Correct Option:</strong>
+                                            <p>{{ j.correctoption }}</p>
+                                        </div>
+                                        <div>
+                                            <strong>Reason:</strong>
+                                            <p>{{ j.reason }}</p>
+                                        </div>
+                                    </div>
+    
+                                </form>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+    
+                            <div class="uk-flex uk-flex-column container__elem uk-hidden">
+                                <form action="{% url 'employee:courseprogress' cname=i.course_name mname=i.module.module_name %}" method="post" class="confidence_meter" id="confidence_{{forloop.counter}}">{% csrf_token %}
+                                    <fieldset class="uk-fieldset confidence-fieldset">
+    
+                                        <div class="uk-margin uk-flex uk-flex-middle">
+                                            <h3 class="confidence-head text-xl font-semibold uk-flex-1">Before moving forward,<br>Rate your confidence on this topic.</h3>
+                                        </div>
+    
+                                        <div class="uk-margin uk-width-1-2@l rate-div" data-id="{{ i.module.module_name }}">
+                                            <div class="inputGroup high__inp mb-6">
+                                                <label for="high__{{forloop.counter}}" class="block rounded-lg btn--success p-4 w-2/3">
+                                                    <input id="high__{{forloop.counter}}" name="confidence_meter__{{i.module.module_name}}" type="radio" value="High" required/>
+                                                <span>High</span>
+                                                </label>
+                                            </div>
+                                            <div class="inputGroup med__inp mb-6">
+                                                <label for="medium__{{forloop.counter}}" class="block rounded-lg btn--primary p-4 w-2/3">
+                                                    <input id="medium__{{forloop.counter}}" name="confidence_meter__{{i.module.module_name}}" type="radio" value="Medium"/>
+                                                    <span>Medium</span>
+                                                </label>
+                                            </div>
+                                            <div class="inputGroup low__inp">
+                                                <label for="low__{{forloop.counter}}" class="block rounded-lg btn--danger p-4 w-2/3">
+                                                    <input id="low__{{forloop.counter}}" name="confidence_meter__{{i.module.module_name}}" type="radio" value="Low"/>
+                                                    <span>Low</span>
+                                                </label>
+                                            </div>
+                                        </div>
+    
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+    
+                        <ul class="uk-pagination mt-4 inner-move">
+                            <li class="inner-move__prev uk-hidden"><a class="btn--secondary rounded-lg text-white hover:text-white px-4 py-2"><span class="uk-margin-small-right" uk-pagination-previous></span> Previous</a></li>
+                            <li class="uk-margin-auto-left inner-move__next"><a class="btn--secondary rounded-lg px-4 py-2 text-white hover:text-white">Next<span class="uk-margin-small-left" uk-pagination-next></span></a></li>
+                            <li class="uk-margin-auto-left inner-move__submit uk-hidden"><button class="btn--primary rounded-lg px-4 py-2 text-white hover:text-white" type="submit" form="confidence_{{forloop.counter}}">Submit</button></li>
+                        </ul>
+                    </div>
+                </li>
+                {% endfor %}
+                {% for q in course_and_quest %}
+                    {% if q.0 == course_name %}
+                        {% if q.1 != 0 %}
+                            {% if q.2 != 0 %}
+                            {% if total_mod_count == completed_mod_count %}
+                            <li class="tab-panel">
+                                <div class="">
+                                    <h2 class="text-xl font-semibold">Final Quest</h2>
+                                </div>
+                
+                                <section class="uk-flex uk-flex-column uk-flex-middle">
+                                    {% if date_today < expiration_date.date %}
+                                        {% if testgiven_status %}
+                                            <img src="{% static 'employee/images/completed_course.svg' %}" alt="final_quest" width="50%" height="50%">
+                                            <p class="text-lg mt-2">You've already taken the test.
+                                            Feel free to go through the <strong>Course</strong> again.
+                                            </p>
+                                            <a class="mt-4 inline-block bg-gray-300 text-lg py-2 px-6 rounded-lg cursor-default text-gray-800 hover:text-gray-800 hover:no-underline" style="cursor: default">Test already taken</a>
+                                        {% else %}
+                                        <img src="{% static 'employee/images/final_quest.svg' %}" alt="final_quest" width="50%" height="50%">
+                                        <p class="text-lg">Good Job, Coming so far...
+                                            Now its time for <strong>Final Round</strong>
+                                        </p>
+                                        <a href="{% url 'employee:finalquest' cname=course_name %}" class="start-button uk-margin-top uk-margin-bottom test-button">Start Test</a>
+                                        {% endif %}
+                                    {% elif expiration_date == None %}
+                                        {% if testgiven_status %}
+                                            <img src="{% static 'employee/images/completed_course.svg' %}" alt="final_quest" width="50%" height="50%">
+                                            <p class="text-lg mt-2">You've already taken the test.
+                                            Feel free to go through the <strong>Course</strong> again.
+                                            </p>
+                                            <a class="mt-4 inline-block bg-gray-300 text-lg py-2 px-6 rounded-lg cursor-default text-gray-800 hover:text-gray-800 hover:no-underline" style="cursor: default">Test already taken</a>
+                                        {% else %}
+                                            <img src="{% static 'employee/images/final_quest.svg' %}" alt="final_quest" width="50%" height="50%">
+                                            <p class="text-lg">Good Job, Coming so far...
+                                                Now its time for <strong>Final Round</strong>
+                                            </p>
+                                            <a href="{% url 'employee:finalquest' cname=course_name %}" class="btn btn--primary md:w-1/3 hover:no-underline hover:text-white">Start Test</a>
+                                        {% endif %}
+                                    {% else %}
+                                        <img src="{% static 'employee/images/final_quest.svg' %}" alt="final_quest" width="50%" height="50%">
+                                        <p class="text-lg">The test has been <strong style="color: tomato">Expired</strong>,
+                                            but you can still go through the content.
+                                        </p>
+                                    {% endif %}
+                                </section>
+                            </li>
+                            {% endif %}
+                            {% else %}
+                            {% if total_mod_count == completed_mod_count %}
+                            <li class="tab-panel">
+                                <div class="">
+                                    <h2 class="text-xl font-semibold">Course Completed</h2>
+                                </div>
+    
+                                <section class="uk-flex uk-flex-column uk-flex-middle">
+                                    <img src="{% static 'employee/images/completed_course.svg' %}" alt="completed_course" width="50%" height="50%">
+                                    <p><strong>Hurray!! 🎉🎉</strong> You have completed the course.</p>
+                                    {% if not rating_flag %} 
+                                    <a href="{% url 'employee:getrating' empemail=email cname=course_name %}" class="btn btn--primary md:w-1/3 hover:no-underline hover:text-white">Rate the course</a>
+                                    {% endif %}
+                                </section>
+                            </li>
+                            {% endif %}
+                            {% endif %}
+                        {% elif q.1 == 0 %}
+                            {% if total_mod_count == completed_mod_count %}
+                            <li class="tab-panel">
+                                <div class="">
+                                    <h2 class="text-xl font-semibold">Course Completed</h2>
+                                </div>
+                
+                                <section class="uk-flex uk-flex-column uk-flex-middle">
+                                    <img src="{% static 'employee/images/completed_course.svg' %}" alt="completed_course" width="50%" height="50%">
+                                    <p><strong>Hurray!! 🎉🎉</strong> You have completed the course.</p>
+                                    {% if not rating_flag %}
+                                    <a href="{% url 'employee:getrating' empemail=email cname=course_name %}" class="btn btn--primary md:w-1/3 hover:no-underline hover:text-white">Rate the course</a>
+                                    {% endif %}
+                                </section>
+                            </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+    {% else %}
+    {% include 'employee/404.html' %}
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.2.7/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.2.7/dist/js/uikit-icons.min.js"></script>
+<!-- Collapsable Menu -->
+<script>
+    function toggleNav(e){
+        if(e.getAttribute('data-toggle') === 'false'){
+            openNav();
+            e.setAttribute('data-toggle', 'true');
+        }else{
+            closeNav();
+            e.setAttribute('data-toggle', 'false');
+        }
+    }
+
+    function openNav(){
+        document.querySelector(".sidebar").style.width = "250px";
+        document.querySelector(".content-main").style.marginLeft = "250px";
+        document.querySelectorAll('.sidebar--container').forEach(item => item.style.visibility = 'visible');
+    }
+
+    function closeNav(){
+        document.querySelectorAll('.sidebar--container').forEach(item => item.style.visibility = 'hidden');
+        document.querySelector(".sidebar").style.width = "0";
+        document.querySelector(".content-main").style.marginLeft= "0";
+    }
+    try{
+        const allDivision = document.querySelectorAll('#side-tab__list li');
+        const allVideos = document.querySelectorAll('video');
+        allDivision.forEach(item => {
+            item.addEventListener('click', () => {
+                if(allVideos){
+                    allVideos.forEach(vid => {
+                        vid.pause();
+                    });
+                }
+            });
+        });
+    }catch(err){}
+</script>
+<!-- Multiple checks -->
+<script>
+    const urls = [],
+          completed = [],
+          scenarios = [];
+
+    // Push modules PDF url to *urls*
+    {% for i in course %}
+        urls.push(`{{i.module.file1.url}}`);
+    {% endfor %}
+
+    // Push Completed modules list to *completed*
+    {% for i in completed_modules %}
+        completed.push(`{{i.0|safe}}`);
+    {% endfor %}
+
+    // Push scenario id with correct option to scenarios
+    {% for s1 in scenarios %}
+        scenarios.push({
+            'id': '{{s1.id}}',
+            'value': '{{s1.correctoption|safe}}'
+        });
+    {% endfor %}
+
+    try{
+        // Scenario Check
+        {% for s1 in scenarios %}
+            {% for s2 in scenarios_all %}
+
+                {% if s2.scinario_id == s1.id %}
+                    {% if s2.associated_course == course_name %}
+                        {% if s2.associated_module == s1.associated_module %}
+                            
+                            sc_submit = document.querySelector(`[data-stat="submit__{{s1.id}}"]`);
+                            sc_submit.classList.add('uk-hidden');
+
+                            sc_answer = document.querySelector(`[data-stat="answer__{{s1.id}}"]`);
+                            sc_answer.classList.remove('uk-hidden');
+
+                            sc_option = document.querySelector(`[data-id="sc_option__{{s1.id}}"]`);
+                            sc_inner = sc_option.querySelectorAll('.sOpt');
+                            
+                            {% if s2.scinario_answer != s1.correctoption %}
+
+                                sc_answer.classList.remove('uk-alert-primary');
+                                sc_answer.classList.add('uk-alert-danger');
+
+                                [...sc_inner].map(opt => {
+                                    opt.nextElementSibling.classList.add('label2');
+                                });
+
+                            {% endif %}
+                                
+                            [...sc_inner].map(opt => {
+                                if(opt.value === `{{s2.scinario_answer}}`){
+                                    opt.checked = true;
+                                }
+                                opt.disabled = true;
+                            });
+
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+
+            {% endfor %}
+        {% endfor %}
+
+        // Confidence Allow
+        const rate = document.querySelectorAll('.rate-div');
+        [...rate].map((r, index) => {
+            const mod = r.getAttribute('data-id');
+            const radio = r.querySelectorAll('input');
+            [...radio].forEach(el => {
+                {% for i in completed_modules %}
+                    if(mod === `{{i.0}}`){
+                        if(el.value === `{{i.1}}`) el.checked = true;
+                    }
+                {% endfor %}
+            })
+        });
+
+    }catch(err){}
+</script>
+
+<script defer src="{% static 'employee/js/pdf.js' %}"></script>
+<script src="{% static 'employee/js/course.start.js' %}"></script>
+<script src="{% static 'employee/js/revisit.js' %}"></script>
+
+{% endblock %}

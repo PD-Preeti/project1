@@ -1,0 +1,89 @@
+/* Import different components */
+@import './_header.css';
+@import './_component.css';
+@import './404.css';
+
+
+/* Normalize */
+html,
+body{
+  background-color: #f8f6f8;
+  font-size: 14px;
+}
+
+.flex-2{
+  flex: 2;
+}
+
+.pr{
+  padding-right: .8rem;
+}
+
+.foot-span{
+  color: coral;
+}
+
+.logo-span{
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* Toast */
+#toast-container {
+  display: inline-block;
+  position: absolute;
+  right: 1rem;
+  top: 100px;
+}
+
+.toast{
+  padding: 1rem;
+  border-radius: 4px;
+  color: #fff;
+  animation: toast 1s forwards ease-in; 
+}
+
+.toast-success{
+  background: rgb(0, 102, 255);
+  box-shadow: 0 8px 25px -8px rgba(0, 102, 255, .5);
+}
+
+.toast-warning{
+  background: rgb(255, 196, 0);
+  box-shadow: 0 8px 25px -8px rgba(255, 196, 0 .5);
+}
+
+@keyframes toast{
+  from{
+      top: -200px;
+  }
+  to{
+      top: 100px;
+  }
+}
+
+/* Override UIKIT CSS */
+.chosen-choices{
+  border-radius: 4px;
+}
+
+#course_teams_chosen{
+  width: 100% !important;
+}
+
+#course_teams_chosen .chosen-search-input{
+  font-size: 14px;
+}
+
+.close-btn{
+  position: absolute;
+  right: 0;
+  font-size: 1.25rem;
+  color: tomato;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.pointer-none {
+  pointer-events: none;
+}

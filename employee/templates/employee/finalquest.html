@@ -1,0 +1,165 @@
+{% extends 'employee/home.html' %}
+{% load staticfiles %}
+
+{% block title %}Final Test - {{course_name}}{% endblock %}
+
+{% block hero %}{% endblock %}
+
+{% block body %}
+
+{% if course_status != 'deleted' and expiration_date.date > date_today or course_status != 'deleted' and expiration_date == None %}
+
+    {% if testgiven_status %}
+        {% include 'employee/404.html' %}
+    {% else %}
+        {% if total_modules == completed_modules|length %}
+        <section class="px-16 py-8 test_layout grid grid-cols-6 gap-x-10" style="min-height: calc(100vh - 70px)">
+            <div class="quest_list col-start-1 col-end-5">
+                <form action="{% url 'employee:scorecal' %}" method="POST" enctype="multipart/form-data" class="finalTest" id="finalTest">
+                    {% for i in questions %}
+                        <fieldset class="finalTest__quest hidden" data-id="res--quest-{{forloop.counter}}">
+                            <legend class="finalTest__legend text-2xl text-gray-600">Ques {{forloop.counter}}.</legend>
+
+                            <div class="my-6">
+                                <p class="quest-desc text-xl font-semibold">{{i.question}}</p>
+                                <input type="number" name="ques_id_{{ forloop.counter }}" class="hidden" value="{{ i.id }}">
+                            </div>
+
+                            {% if i.quest_file %}
+                                <div class="">
+                                    {% if extension.0 %}
+                                        {% if i.module_name == extension.0.0 %}
+                                            {% if extension.0.1 == 'mp4' %}
+                                                <video class="quest_file__media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="video" width="300px" height="300px">
+                                                    <source src="/media/{{i.quest_file}}" type="video/mp4">
+                                                </video>
+                                            {% elif extension.0.1 == 'mp3' %}
+                                                <audio class="quest_file__media" controls controlsList="nodownload" oncontextmenu="return false;" data-type="audio">
+                                                    <source src="/media/{{i.quest_file}}" type="audio/mpeg">
+                                                </audio>
+                                            {% else %}
+                                                <img class="quest_file__media" src="/media/{{i.quest_file}}" alt="img" width="300px" height="300px"/>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+
+                            <div class="mt-6">
+                                <ul class="text-lg">
+                                    <li>
+                                        <label for="res_{{forloop.counter}}_1" class="radio radio_label">
+                                            <input type="radio" name="questAns__{{forloop.counter}}" id="res_{{forloop.counter}}_1" class="mr-2 optBtn" value="{{i.option1}}">
+                                            <span class="label"></span>{{i.option1}}
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label for="res_{{forloop.counter}}_2" class="radio radio_label">
+                                            <input type="radio" name="questAns__{{forloop.counter}}" id="res_{{forloop.counter}}_2" class="mr-2 optBtn" value="{{i.option2}}">
+                                            <span class="label"></span>{{i.option2}}
+                                        </label>
+                                    </li>
+                                    {% if i.option3 %}
+                                    <li>
+                                        <label for="res_{{forloop.counter}}_3" class="radio radio_label">
+                                            <input type="radio" name="questAns__{{forloop.counter}}" id="res_{{forloop.counter}}_3" class="mr-2 optBtn" value="{{i.option3}}">
+                                            <span class="label"></span>{{i.option3}}
+                                        </label>
+                                    </li>
+                                    {% endif %}
+                                    {% if i.option4 %}
+                                    <li>
+                                        <label for="res_{{forloop.counter}}_4" class="radio radio_label">
+                                            <input type="radio" name="questAns__{{forloop.counter}}" id="res_{{forloop.counter}}_4" class="mr-2 optBtn" value="{{i.option4}}">
+                                            <span class="label"></span>{{i.option4}}
+                                        </label>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+
+                        </fieldset>
+                    {% endfor %}
+                    <div class="hidden">
+                        <input type="text" name="course_name" value="{{course_name}}">
+                        <input type="number" name="quest_count">
+                    </div>
+                </form>
+
+                <ul class="mt-8 flex items-center justify-end gap-x-2">
+                    <li>
+                        <a href="#" class="finalTest__prev bg-gray-800 text-white py-2 px-4 rounded-lg block hidden">
+                            <span class=""></span> Previous
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="#" class="finalTest__next bg-gray-800 text-white py-2 px-4 rounded-lg block">Next 
+                            <span class=""></span>
+                        </a>
+                    </li>
+                    <li class="hidden">
+                        <button type="submit" class="finalTest__submit bg-blue-600 text-white py-2 px-4 rounded-lg" form="finalTest">Submit</button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="panel--nav col-start-5 col-end-7 px-6 py-4">
+                <div class="panel--nav__body">
+                    <div class="panel--nav__body__time mb-4">
+                        <p class="monitor text-3xl font-semibold">Time Left - <span class="monitor--time"></span></p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-y-2">
+                        <div class="cols-span-1">
+                            <label class="flex items-center text-sm">
+                                <span class="mr-2 block w-3 h-3 rounded-full border-2 border-solid border-gray-500" title="notvisited"></span>Not Visited
+                            </label>
+                        </div>
+                        <div class="cols-span-1">
+                            <label class="flex items-center text-sm">
+                                <span class="mr-2 block w-3 h-3 rounded-full bg-blue-500" title="currently"></span>Current
+                            </label>
+                        </div>
+                        <div class="cols-span-1">
+                            <label class="flex items-center text-sm">
+                                <span class="mr-2 block w-3 h-3 rounded-full bg-green-500" title="answered"></span>Answered
+                            </label>
+                        </div>
+                        <div class="cols-span-1">
+                            <label class="flex items-center text-sm">
+                                <span class="mr-2 block w-3 h-3 rounded-full bg-red-500" title="notanswered"></span>Not Answered
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h4 class="panel--nav-title uppercase">Navigation</h4>
+                    </div>
+
+                    <div class="ques__switch mt-4 flex flex-wrap gap-10">
+                        {% for i in questions %}
+                        <div class="switch__">
+                            <a class="switch__a flex items-center justify-center border-2 border-solid border-gray-500 w-10 h-10 rounded-full cursor-pointer" data-comp="res--quest-{{forloop.counter}}">{{forloop.counter}}</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% else %}
+            {% include 'employee/404.html' %}
+        {% endif %}
+    {% endif %}
+
+{% else %}
+    {% include 'employee/404.html' %}
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const testTime = `{{course_test_time}}`;
+    </script>
+    <script src="{% static 'employee/js/panel.js' %}"></script>
+{% endblock %}

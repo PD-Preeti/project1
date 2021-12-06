@@ -1,0 +1,1 @@
+.tm-navbar-container:not(.uk-navbar-transparent){background:-webkit-gradient(linear, right top, left top, from(#f5a228), to(#f0891e));background:linear-gradient(to left, #f5a228, #f0891e)}.tm-nav li.uk-active a:before{content:"";border-top:1px solid #f0891e}.logout-ul{list-style-type:none;margin-bottom:0px}html{background-color:#f8f6f8}

@@ -1,0 +1,10 @@
+{% load staticfiles %}
+<div class="uk-flex uk-flex-column uk-flex-middle uk-flex-center">
+    <img src="{% static 'employee/images/emoji.png' %}" width="200px" height="200px">
+    <p class="uk-text-large uk-margin-remove-bottom">Seems like this course modules has been removed</p>
+    <p>It's an empty course</p>
+    <a href="{% url 'employee:employeehome' %}" class="uk-button uk-button-primary uk-border-rounded">
+        <i class="fas fa-arrow-left uk-margin-small-right"></i> 
+        Go back to homepage
+    </a>
+</div>

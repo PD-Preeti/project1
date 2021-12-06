@@ -1,0 +1,168 @@
+{% extends 'adminboard/home.html' %}
+{% load staticfiles %}
+{% block loader %}{% endblock %}
+
+{% block extrastyle %}
+<!-- Drag n Drop -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/all.min.css">
+<link rel="stylesheet" href="{% static 'adminboard/css/dragdrop.css' %}">
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sortable/0.9.13/jquery-sortable.js"></script>
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/js/all.min.js"></script>
+<!-- Chosen CSS -->
+<link rel="stylesheet" href="{% static 'adminboard/css/chosen.min.css' %}">
+
+<title>Create Course</title>
+{% endblock %}
+
+{% block html %}
+
+<form class="uk-form-stacked" id="courseForm" method="post" action="{% url 'adminboard:savecourse' %}" enctype="multipart/form-data">
+	{% csrf_token %}
+	<fieldset class="uk-width-1-2@l uk-fieldset" data-class="form-fieldset">
+		<legend class="uk-legend uk-margin-bottom">Create a Course</legend>
+
+		<section class="uk-margin-bottom">
+			<label for="" class="uk-form-label">Enter Course Name</label>
+			<div class="uk-form-controls">
+				<input class="uk-input" name="course_name" type="text" placeholder="Course XYZ" required=true autocomplete="off">
+			</div>
+			<p class="error-p uk-hidden">Course name already exists</p>
+		</section>
+
+		<section class="uk-margin-bottom uk-flex">
+			<div uk-form-custom="target: true" class="uk-width-1-2">
+				<label for="" class="uk-form-label">Upload Course Cover</label>
+				<input type="file" name="cover" accept=".jpg, .jpeg, .png, .svg">
+				<input class="uk-input elem-disabled" type="text" placeholder="Select image..." disabled>
+				<a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+			</div>
+
+			<div class="uk-margin-left uk-width-1-2">
+				<label for="" class="uk-form-label">Select Team</label>
+				<div class="uk-form-controls">
+					<div id="output-team"></div>
+					<select data-placeholder="Select teams..." name="course_team" multiple class="chosen-select uk-select dis team-select" id="course_teams">
+						{% for i in teams %}
+						<option value="{{i}}">{{ i }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+		</section>
+
+		<section class="uk-margin-bottom uk-flex">
+			<div class="uk-width-1-2">
+				<label for="" class="uk-form-label">Enter Test Time (in minutes)</label>
+				<div class="uk-form-controls">
+					<input class="uk-input" name="course_test_time" type="number" placeholder="30" value="0" required=true autocomplete="off">
+				</div>
+			</div>
+
+			<div class="uk-margin-left uk-width-1-2">
+				<label for="" class="uk-form-label">Enter number of questions for final test</label>
+				<div class="uk-form-controls">
+					<input class="uk-input" name="course_test_quest" type="number" placeholder="20" value="0" required=true autocomplete="off">
+				</div>
+			</div>
+		</section>
+		<!-- Email Trigger -->
+		<section class="uk-margin-bottom">
+			<label for="" class="uk-form-label uk-margin-bottom">Notify to?</label>
+			<!-- Option selection -->
+			<div class="uk-grid-small uk-child-width-auto uk-grid uk-margin-bottom">
+				<label><input class="uk-radio" type="radio" name="notify_to" value="notify_teams"> Teams</label>
+				<label><input class="uk-radio" type="radio" name="notify_to" value="notify_users"> Users</label>
+			</div>
+
+			<!-- Selected Team Option -->
+			<div class="uk-form-controls uk-hidden" id="notify_teams--sect">
+				<div id="output-notify-teams"></div>
+				<select data-placeholder="select teams to notify" name="notify_teams_tags[]" multiple class="chosen-select uk-select dis notify_teams-select">
+					{% for i in teams %}
+					<option value="{{ i }}">{{ i }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<!-- Selected User Option -->
+			<div class="uk-form-controls uk-hidden" id="notify_users--sect">
+				<div id="output-notify-users"></div>
+				<select data-placeholder="select users to notify" name="notify_users_tags[]" multiple class="chosen-select uk-select dis notify_users-select" >
+					{% for i in notify_users %}
+						<option value="{{ i.1 }}">{{ i.0 }} ({{ i.1 }})</option>
+					{% endfor %}
+				</select>
+			</div>
+		</section>
+
+	</fieldset>
+	
+	<!-- Drag-n-Drop -->
+	<div class="uk-margin uk-hidden">
+		<textarea class="uk-textarea selected-list" name="json_items" rows="5" placeholder="Textarea"></textarea>
+	</div>
+	<div class="uk-margin-top">
+		<label for="" class="uk-form-label">Select Modules (With drag-n-drop)</label>
+	</div>
+	<input type="text" name="page_contents[]" data-options='{{ module_dict }}'
+		data-selected='[]'
+		data-field-title="<span uk-icon='icon: folder'></span> Available Modules"
+		data-selected-title="<span uk-icon='icon: star'></span> Selected Modules"
+		class="dragableMultiselect">
+</form>
+
+<div class="uk-margin">
+	<button class="uk-button uk-button-primary" type="submit" form="courseForm">Create</button>
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{% static 'adminboard/js/chosen.jquery.min.js' %}"></script>
+<script>
+	const courseNames = [];
+	{% for i in course_names %}
+	courseNames.push(`{{i.course_name|safe}}`.toLowerCase());
+	{% endfor %}
+
+	// Multiple teams
+	$('.team-select').chosen();
+	document.getElementById('output-team').innerHTML = location.search;
+
+	(function notifyTrigger(){
+		const getNotifyTo = document.querySelectorAll('[name="notify_to"]');
+		getNotifyTo.forEach(to => {
+			to.addEventListener('click', () => {
+				const val = to.value;
+				document.querySelector(`#${val}--sect`).classList.remove('uk-hidden');
+
+				if(val === 'notify_teams'){
+					document.querySelector('#notify_users--sect').classList.add('uk-hidden');
+					// For teams
+					$('.notify_teams-select').chosen();
+					document.getElementById('output-notify-teams').innerHTML = location.search;
+					document.querySelector('#notify_teams--sect > .chosen-container').style.width = '100%';
+				}else{
+					document.querySelector('#notify_teams--sect').classList.add('uk-hidden');
+					// For User
+					$('.notify_users-select').chosen();
+					document.getElementById('output-notify-users').innerHTML = location.search;
+					document.querySelector('#notify_users--sect > .chosen-container').style.width = '100%';
+				}
+			})
+		})
+	})();
+</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+<script src="{% static 'adminboard/js/ui.js' %}"></script>
+<!-- Drag n Drop -->
+<script src="{% static 'adminboard/js/dragdrop.js' %}"></script>
+{% endblock %}

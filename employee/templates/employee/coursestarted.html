@@ -1,0 +1,314 @@
+{% extends 'employee/home.html' %}
+{% load staticfiles %}
+
+{% block title %}{{course_name }}{% endblock %} 
+
+{% block styles %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.7.570/pdf.min.js" integrity="sha512-g4FwCPWM/fZB1Eie86ZwKjOP+yBIxSBM/b2gQAiSVqCgkyvZ0XxYPDEcN2qqaKKEvK6a05+IPL1raO96RrhYDQ==" crossorigin="anonymous"></script>
+<script>
+    // Get course data
+    const courseData = [];
+    const userData = {
+        name: '{{first_name}}',
+        email: '{{email}}'
+    };
+    let courseCompleted = false;
+    let testStatus = false;
+    const testgiven_status = '{{testgiven_status}}'
+    let modulecompleted = false;
+    let moduleconfidence = '';
+    const ratingFlag = (("{{ rating_flag }}").toLowerCase() == "true");
+    const completionIMG = `{% static 'employee/images/completed_course.svg' %}`;
+    const finalURL = "{% url 'employee:finalquest' cname=course_name %}";
+    const rateURL = "{% url 'employee:getrating' empemail=email cname=course_name %}";
+
+    // get extensions
+    function getExtension(fileName) {
+        return fileName.slice((fileName.lastIndexOf(".") - 1 >>> 0) + 2);
+    }
+
+    // Sanitize data
+    function sanitize(string) {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#x27;',
+            "/": '&#x2F;',
+        };
+        const reg = /[&<>"'/]/ig;
+        return string.replace(reg, (match)=>(map[match]));
+    }
+
+    {% for i in course %}
+        modulecompleted = false;
+        moduleconfidence = '';
+
+        {% if completed_modules %}
+            {% for c in completed_modules %}
+                {% if c.0 == i.module.module_name %}
+                    modulecompleted = true;
+                    moduleconfidence = '{{c.1}}';
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+
+        courseData.push({
+            id: parseInt('{{ i.id }}'),
+            course_name: '{{ course_name|safe }}',
+            module_name: '{{ i.module.module_name|safe }}',
+            module_links: [
+                {% if i.module.link1 %}'{{ i.module.link1 }}',{% endif %}
+                {% if i.module.link2 %}'{{ i.module.link2 }}',{% endif %}
+                {% if i.module.link3 %}'{{ i.module.link3 }}',{% endif %}
+                {% if i.module.link4 %}'{{ i.module.link4 }}',{% endif %}
+                {% if i.module.link5 %}'{{ i.module.link5 }}',{% endif %}
+                {% if i.module.link6 %}'{{ i.module.link6 }}',{% endif %}
+                {% if i.module.link7 %}'{{ i.module.link7 }}',{% endif %}
+                {% if i.module.link8 %}'{{ i.module.link8 }}',{% endif %}
+                {% if i.module.link9 %}'{{ i.module.link9 }}',{% endif %}
+                {% if i.module.link10 %}'{{ i.module.link10 }}',{% endif %}
+            ],
+            module_files: [
+                {
+                    url: '/media/{{ i.module.file1 }}',
+                    type: getExtension('{{ i.module.file1 }}')
+                },
+                {% if i.module.file2 %}
+                {
+                    url: '/media/{{ i.module.file2 }}',
+                    type: getExtension('{{ i.module.file2 }}')
+                },
+                {% endif %}
+                {% if i.module.video_file %}
+                {
+                    url: '/media/{{ i.module.video_file }}',
+                    type: getExtension('{{ i.module.video_file }}')
+                },
+                {% endif %}
+                {% if i.module.file3 %}
+                {
+                    url: '/media/{{ i.module.file3 }}',
+                    type: getExtension('{{ i.module.file3 }}')
+                },
+                {% endif %}
+                {% if i.module.file4 %}
+                {
+                    url: '/media/{{ i.module.file4 }}',
+                    type: getExtension('{{ i.module.file4 }}')
+                },
+                {% endif %}
+                {% if i.module.file5 %}
+                {
+                    url: '/media/{{ i.module.file5 }}',
+                    type: getExtension('{{ i.module.file5 }}')
+                },
+                {% endif %}
+                {% if i.module.file6 %}
+                {
+                    url: '/media/{{ i.module.file6 }}',
+                    type: getExtension('{{ i.module.file6 }}')
+                },
+                {% endif %}
+                {% if i.module.file7 %}
+                {
+                    url: '/media/{{ i.module.file7 }}',
+                    type: getExtension('{{ i.module.file7 }}')
+                },
+                {% endif %}
+                {% if i.module.file8 %}
+                {
+                    url: '/media/{{ i.module.file8 }}',
+                    type: getExtension('{{ i.module.file8 }}')
+                },
+                {% endif %}
+                {% if i.module.file9 %}
+                {
+                    url: '/media/{{ i.module.file9 }}',
+                    type: getExtension('{{ i.module.file9 }}')
+                },
+                {% endif %}
+                {% if i.module.file10 %}
+                {
+                    url: '/media/{{ i.module.file10 }}',
+                    type: getExtension('{{ i.module.file10 }}')
+                },
+                {% endif %}
+                {% if i.module.file11 %}
+                {
+                    url: '/media/{{ i.module.file11 }}',
+                    type: getExtension('{{ i.module.file11 }}')
+                },
+                {% endif %}
+                {% if i.module.file12 %}
+                {
+                    url: '/media/{{ i.module.file12 }}',
+                    type: getExtension('{{ i.module.file12 }}')
+                },
+                {% endif %}
+                {% if i.module.file13 %}
+                {
+                    url: '/media/{{ i.module.file13 }}',
+                    type: getExtension('{{ i.module.file13 }}')
+                },
+                {% endif %}
+                {% if i.module.file14 %}
+                {
+                    url: '/media/{{ i.module.file14 }}',
+                    type: getExtension('{{ i.module.file14 }}')
+                },
+                {% endif %}
+            ],
+            module_scenarios: [
+                {% if scenarios %}
+                {% for j in scenarios %}
+                {% if i.module.module_name == j.associated_module %}
+                {
+                    id: '{{ j.id }}',
+                    description: '{{ j.scenario_desc|safe }}',
+                    file: {
+                        {% if j.scenario_file %}
+                        url: '/media/{{ j.scenario_file }}',
+                        type: getExtension('{{ j.scenario_file }}')
+                        {% endif %}
+                    },
+                    csrf_token: '{% csrf_token %}',
+                    option1: '{{ j.option1|safe }}',
+                    option2: '{{ j.option2|safe }}',
+                    option3: '{{ j.option3|safe }}',
+                    option4: '{{ j.option4|safe }}',
+                    correctoption: '{{ j.correctoption|safe }}',
+                    reason: '{{ j.reason|safe }}',
+                    answered: {
+                        {% for a in scenarios_all %}
+                            {% if a.scinario_id == j.id %}
+                                {% if a.associated_module == j.associated_module %}
+                                    {% if a.scinario_answer != j.correctoption %}
+                                        status: false,
+                                        value: '{{ a.scinario_answer|safe }}'
+                                    {% else %}
+                                        status: true,
+                                        value: '{{ a.scinario_answer|safe }}'
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    }
+                },
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            ],
+            confidence_url: '{% url "employee:courseprogress" cname=i.course_name mname=i.module.module_name %}',
+            completed: modulecompleted,
+            csrf_token: '{% csrf_token %}',
+            confidence: moduleconfidence,
+            questURL: "{% url 'employee:coursestarted' cname=course_name %}",
+            questions: [
+                {% for q in quest_answer %}
+                    {% if q.module_name == i.module.module_name %}
+                    {
+                        question: sanitize(`{{q.question|safe}}`).replaceAll(/\n\r?/g, '<br />'),
+                        answer: (`{{q.answer|safe}}`).replaceAll(/\n\r?/g, '<br />'),
+                        person_name: "{{q.progress.person_name}}",
+                        person_email: "{{q.progress.person_email}}",
+                        created_date: "{{q.created_date}}",
+                        status: "{{q.status}}"
+                    },
+                    {% endif %}
+                {% endfor %}
+            ]
+        });
+
+        {% for q in course_and_quest %}
+            {% if q.0 == course_name %}
+                {% if q.1 != 0 %}
+
+                    {% if q.2 != 0 %}
+                        {% if total_mod_count == completed_mod_count %}
+                            // If total module count is equal to completed count then return completed
+                            courseCompleted = true;
+                            testStatus = true;
+                        {% endif %}
+                    {% else %}
+                        {% if total_mod_count == completed_mod_count %}
+                            // If total module count is equal to completed count then return completed
+                            courseCompleted = true;
+                            testStatus = false;
+                        {% endif %}
+                    {% endif %}
+                    
+                {% elif q.1 == 0 %}
+
+                    {% if total_mod_count == completed_mod_count %}
+                        courseCompleted = true;
+                        testStatus = false;
+                    {% endif %}
+
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+
+    console.log(courseData);
+</script>
+<script defer src="{% static 'employee/js/pdf.js' %}"></script>
+<script defer src="{% static 'employee/js/course.start.js' %}"></script>
+{% endblock %} 
+
+{% block hero %}{% endblock %}
+
+{% block body %}
+<section class="course-app relative" id="courseApp">
+    {% if course_status != 'deleted' and teststart_status == False %}
+        <!-- Sidebar -->
+        <aside class="sidebar relative">
+            <h3 class="sidebar-title">Course Content</h3>
+
+            <ul class="sidebar-list" id="sidebarList"></ul>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="app-data">
+            <!-- Collapase Button -->
+            <button class="openbtn text-lg font-semibold" onclick="toggleNav(this)" data-toggle="false">
+                <i class="far fa-caret-square-up mr-2" style="transform: rotate(90deg);"></i>
+            </button>
+
+            <!-- Content Div -->
+            <div class="main-container">
+                <div class="content" id="content"></div>
+                <!-- Fullscreen Button -->
+                <button class="fullscreenbtn text-lg font-semibold" onclick="toggleScreen(this)" data-toggle="false">
+                    <i class="fas fa-expand"></i>
+                </button> 
+                <div class="navigator-container">
+                    <div class="navigator-div" id="navigatorDiv"></div>
+                </div>
+            </div>
+
+            <!-- Extra Div -->
+            <div class="extra px-12 py-6" id="extra">
+                <ul class="flex text-xl font-semibold text-gray-700 border-b border-solid border-gray-500">
+                    <li class="extra-list-item active" data-id="quest" onclick="toggleTab(this)">Q&A</li>
+                    <li class="extra-list-item" data-id="resource" onclick="toggleTab(this)">Resources</li>
+                </ul>
+
+                <ul class="tab px-4 py-6">
+                    <li class="tab-item w-full h-full" id="quest"></li>
+                    <li class="tab-item w-full h-full hidden" id="resource"></li>
+                </ul>
+            </div>
+
+            <div class="final hidden" id="finalDiv"></div>
+        </div>
+    {% else %}
+        {% include 'employee/404.html' %}
+    {% endif %}
+</section>
+{% endblock %} 
+
+{% block scripts %}{% endblock %}

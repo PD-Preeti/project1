@@ -1,0 +1,50 @@
+{% for j in course_cover %}
+{% if i.0 == j.course_name %}
+{% if j.modules_len != 0 %}
+<li class="course-card relative" data-id="{{i.0}}" data-rating="{{i.6}}">
+    <a href="{% url 'employee:continuecourse' cname=i.0 %}" class="visit-link"></a>
+    <div class="course-cover bg-blue-200">
+        {% if j.badge == True %}
+            <span class="badge">Updated</span>
+        {% endif %}
+        <img src="/media/{{ j.course_cover }}" class="cover-image" data-src="{{j.course_cover}}" data-id="course_bg1__{{i.0}}" onerror="setTimeout(()=> setCourseImage(this),300)">
+    </div>
+    <div class="course-data mt-2">
+        <h4 class="text-xl font-semibold course_title capitalize course-title">{{i.0}}</h4>
+        <div class="flex text-gray-600 font-medium">
+            <p class="flex-1 text-sm">Modules: {{j.modules_len}}</p>
+            <p class="flex-1 text-sm">Test: {{j.test_available}}</p>
+            {% if i.2 == True %}
+                {% for j in course_and_quest %}
+                    {% if j.0 == i.0 %}
+                        {% if j.1 != 0 %}
+                            {% if j.2 != 0 %}
+                            <p class="flex-1 text-sm">Score: NA</p>
+                            {% else %}
+                            <p class="flex-1 text-sm">Score: NA</p>
+                            {% endif %}
+                        {% else %}
+                            <p class="flex-1 text-sm">Score: NA</p>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="mt-2">
+            <div class="progress-bar">
+                <div class="progress-bar--inner" style="width: {{i.1}}%"></div>
+            </div>
+            <p class="text-sm text-gray-600 font-medium mt-2">{{i.1}}% Complete</p>
+        </div>
+        <div class="flex gap-2 items-center mt-2">
+            <p class="text-xl font-semibold text-yellow-500">{{i.6}}</p>
+            <div class="stars-outer">
+                <div class="stars-inner"></div>
+            </div>
+            <p class="text-sm font-medium text-gray-600">(Your rating)</p>
+        </div>
+    </div>
+</li>
+{% endif %}
+{% endif %}
+{% endfor %}

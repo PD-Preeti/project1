@@ -1,0 +1,53 @@
+{% extends 'employee/home.html' %}
+{% load staticfiles %}
+
+{% block title %}Your Courses{% endblock %}
+{% block styles %}
+{% endblock %}
+
+{% block hero %}{% endblock %}
+
+{% block body %}
+<section class="px-16 py-8">
+    <div class="flex items-center mb-12">
+        <p class="text-2xl font-semibold">Your Courses</p>
+    </div>
+
+    <section class="grid md:grid-cols-5 gap-4">
+        {% if courses %}
+            <div id="all_courses" class="md:col-span-4">
+                <div class="input-div">
+                    <i class="fas fa-search mr-4"></i>
+                    <input type="text" name="" id="" class="search search-input" placeholder="search courses">
+                </div>
+                <ul class="list flex flex-wrap gap-x-10 gap-y-16 mt-12" id="courseCardList">
+                    {% for i in courses %}
+                    {% include 'employee/components/all_courses.html' %}
+                    {% endfor %}
+                </ul>
+                <ul class="pagination flex items-center justify-start mt-16"></ul>
+            </div>
+        {% else %}
+            <div class="flex md:col-span-4 inline-block">
+                <p class="alert"><span class="bg-blue-200 text-blue-800 p-4">There're no courses</span></p>
+            </div>
+        {% endif %}
+        {% include 'employee/components/revision_box.html' %}
+    </section>
+
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+<script>
+    localStorage.clear();
+    let monkeyList = new List('all_courses', {
+        valueNames: ['course_title'],
+        page: 25,
+        pagination: true
+    });
+</script>
+<script src="{% static 'employee/js/card.image.js' %}"></script>
+<script src="{% static 'employee/js/card.rating.js' %}"></script>
+{% endblock %}

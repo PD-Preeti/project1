@@ -1,0 +1,41 @@
+<div class="uk-position-relative course__card">
+    <a href="{% url 'employee:continuecourse' cname=i.0 %}" class="card-link"></a>
+        <div class="uk-card uk-card-hover uk-card-body uk-position-relative">
+            <div class="uk-card-media-top grid-list--top">
+                {% for j in course_cover %}
+                    {% if i.0 == j.course_name %}
+                    <img src="/media/{{ j.course_cover }}" data-src="{{j.course_cover}}" data-id="course_bg2__{{i.0}}"  onerror="setTimeout(()=> setCourseImage(this),300)">
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <progress id="js-progressbar" class="uk-progress grid-list--progress" value="{{ i.1 }}" max="100"></progress>
+            <span class="grid-list--progress-text">{{ i.1 }}% Complete</span>
+            <h3 class="uk-card-title">{{ i.0 }}{% if date_today < i.4 %}{% endif %}</h3>
+            
+            {% if date_today.date < i.4.date and i.5 != 'deleted' and i.2 is False%}
+            <p style="font-size: .9rem; font-weight: 400; color: var(--light-dark)">Due Date: {{i.4.date}}</p>
+            {% endif %}
+
+            {% if date_today.date > i.4.date %}
+            <span class="expired-course"><i class="fas fa-ban"></i> Expired</span>
+            {% endif %}
+
+            {% if course_and_quest %}
+                {% for q in course_and_quest %}
+                    {% if q.0 == i.0 %}
+                        {% if q.1 != 0 %}
+                            {% if q.2 != 0 %}
+                            {% if i.2 is False %}
+                            {% if date_today.date < i.4.date and i.5 != 'deleted' %}
+                            {% if i.1 == 100 %}
+                                <a class="top__p finalTest__pending"><i class="far fa-edit top__span"></i> Pending Test</a>
+                            {% endif %}
+                            {% endif %}
+                            {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+</div>

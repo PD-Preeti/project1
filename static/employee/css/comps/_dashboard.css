@@ -1,0 +1,106 @@
+.report_container__card{
+  grid-column: span 3 / span 3;
+  padding: 1rem 2rem;
+  height: 7rem;
+  border-radius: 17px;
+  color: var(--custom-white-2);
+  position: relative;
+}
+
+.report_container__card .icon{
+  position: absolute;
+  font-size: 4rem;
+  color: var(--custom-black-1);
+  opacity: .25;
+  top: 50%;
+  right: 1.5rem;
+  transform: translateY(-50%);
+}
+
+/* Datatables */
+/*Form fields*/
+.dataTables_wrapper select,
+.dataTables_wrapper .dataTables_filter input {
+  color: var(--custom-gray-1);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  line-height: 1.25;
+  border: 1px solid var(--custom-gray-1);
+  border-radius: 4px;
+  background-color: var(--custom-white-3);
+}
+
+/*Row Hover*/
+table.dataTable thead{
+  text-align: left !important;
+}
+
+table.dataTable tbody td{
+  padding-left: 1.25rem;
+}
+
+table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
+  background-color: var(--custom-white-2);
+}
+
+/*Pagination Buttons*/
+.dataTables_wrapper .dataTables_paginate .paginate_button		{
+  font-weight: 500;
+  border-radius: .25rem;
+  border: 1px solid transparent;
+}
+
+/*Pagination Buttons - Current selected */
+.dataTables_wrapper .dataTables_paginate .paginate_button.current	{
+  color: var(--custom-white-1) !important;
+  font-weight: 500;
+  border: none;
+  border-radius: 4px;
+  background: var(--custom-blue-1) !important;
+}
+
+/*Pagination Buttons - Hover */
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
+  color: var(--custom-white-1) !important;
+  font-weight: 500;
+  border-radius: .25rem;
+  background: var(--custom-blue-1) !important;
+  border: 0px;
+}
+
+/*Add padding to bottom border */
+table.dataTable.no-footer {
+  border-bottom: 1px solid var(--custom-gray-2);
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+
+/*Change colour of responsive icon*/
+table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before, 
+table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
+  background-color:var(--custom-blue-1) !important;
+}
+
+/* Input Search */
+#dashboardSearch .chosen-container{
+  width: 100% !important;
+}
+
+#dashboardSearch .search_icon{
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  padding: 0 1rem;
+  background-color: var(--custom-blue-1);
+  color: var(--custom-white-1);
+}
+
+.dt-button.buttons-csv.buttons-html5{
+  background-color: var(--custom-gray-1) !important;
+  padding: .5rem 1rem;
+  border-radius: 4px;
+  color: var(--custom-white-1);
+}

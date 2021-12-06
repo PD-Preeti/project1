@@ -1,0 +1,103 @@
+{% extends 'employee/home.html' %}
+{% load staticfiles %}
+
+{% block title %}Recommended Courses{% endblock %}
+{% block styles %}
+{% endblock %}
+
+{% block hero %}{% endblock %}
+
+{% block body %}
+<div class="grid md:grid-cols-6 gap-4">
+<!-- Recommendation -->
+<section class="px-16 py-8 md:col-span-4">
+    <div class="flex items-center mb-12">
+        <p class="text-2xl font-semibold">Recommended Courses</p>
+    </div>
+{% if recommendation %}
+{% for rec in recommendation %}
+    <ul class="recommended-list flex flex-column gap-20">
+        <li class="recommended-list--items flex gap-10 relative border mb-6 w-full">
+            <div class="course-cover relative remove-radius bg-blue-200">
+                <a href="" class="visit-link"></a>
+                <img src="/media/" class="cover-image" 
+                    data-src="{{cover_media_url}}" 
+                    data-id="course_bg1__{{course_name}}" 
+                    onerror="setTimeout(()=> setCourseImage(this),300)"
+                >
+            </div>
+            <div class="w-full pr-4">
+                <div>
+                    <a href="" class="visit-link"></a>
+                    <h4 class="text-2xl font-semibold">{{ rec.recommended_course }}</h4>
+                    <div class="flex text-gray-600 font-medium mt-2">
+                        <p class="flex-1 text-base">Module: {{ rec.module_count }}</p>
+                        <p class="flex-1 text-base">Test: {% if rec.test_flag %} 1 {% else %} NA {% endif %}</p>
+                        <p class="text-base" style="flex: 2">Recommended Date (IST): {{ rec.submit_time }}</p>
+                    </div>
+                    <p class="text-gray-800 font-medium my-2">Recommended By: <span class="text-blue-600">{{ rec.user_name }} ({{rec.user_designation}})</span></p>
+                </div>
+                {% if rec.status == 'NoAction' %}
+                <div class="mt-4 flex items-center relative z-10">
+                    <a href="{% url 'employee:acceptrecommendation' cname=rec.recommended_course id=rec.id %}" class="btn--primary rounded-lg text-base px-6 p-2 text-teal-100 font-semibold">Accept</a>
+                    <a href="{% url 'employee:rejectrecommendation' id=rec.id %}" class="btn--danger rounded-lg text-base px-6 p-2 ml-4 text-teal-100 font-semibold">Reject</a>
+                </div>
+                {% else %}
+                    <div class="mt-4">
+                        {% if rec.status == 'Rejected' %}
+                        <p class="bg-red-300 text-red-900 px-4 py-1 rounded-lg inline-block">{{rec.status}}</p>
+                        {% else %}
+                        <p class="bg-blue-300 text-blue-900 px-4 py-1 rounded-lg inline-block">{{rec.status}}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </li>
+    </ul>
+{% endfor %}
+{% else %}
+    <div class="no-recommendation">
+        <p class="bg-purple-200 inline-block py-4 px-6 rounded-lg">There are no recommended course</p>
+    </div>
+{% endif %}
+</section>
+
+<!-- Recommended -->
+<section class="px-4 py-8 md:col-span-2">
+    <div class="flex items-center mb-12">
+        <p class="text-2xl font-semibold">Recommendations List</p>
+    </div>
+    {% if my_recommendation %}
+    <div class="mt-4 border rounded-lg border-gray-600">
+        <ul class="list-disc ml-6 px-4 py-2">
+            {% for rec in my_recommendation %}
+            <li class="py-2 ">
+                <div>
+                    <h4 class="text-lg font-semibold">{{ rec.recommended_course }}</h4>
+                    <p>Recommended Date (IST): <strong class="font-medium">{{ rec.submit_time }}</strong></p>
+                    <p>Recommended To: <span class="text-blue-600 font-medium">{{ rec.recommended_to_name }} ({{ rec.recommended_to_designation }})</span></p>
+                    {% if rec.status == 'NoAction' %}
+                    <p class="bg-yellow-300 text-yellow-900 inline-block px-2 py-1 rounded-lg">Pending</p>
+                    {% elif rec.status == 'Rejected' %}
+                    <p class="bg-red-300 text-red-900 inline-block px-2 py-1 rounded-lg">{{rec.status}}</p>
+                    {% else %}
+                    <p class="bg-blue-300 text-blue-900 inline-block px-2 py-1 rounded-lg">{{rec.status}}</p>
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% else %}
+    <div>
+        <p class="bg-purple-200 inline-block py-4 px-6 rounded-lg">No recommendations made</p>
+    </div>
+    {% endif %}
+</section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'employee/js/common.js' %}"></script>
+<script src="{% static 'employee/js/card.image.js' %}"></script>
+{% endblock %}

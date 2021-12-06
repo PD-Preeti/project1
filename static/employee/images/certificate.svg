@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_5" data-name="Rectangle 5" width="1920" height="1080" fill="#fff"/>
+    </clipPath>
+    <linearGradient id="linear-gradient" y1="0.5" x2="1" y2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ee6f27"/>
+      <stop offset="0.27" stop-color="#ea6d26"/>
+      <stop offset="0.56" stop-color="#dd6723"/>
+      <stop offset="0.84" stop-color="#c95e1f"/>
+      <stop offset="1" stop-color="#ba571c"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="0" y1="0.5" x2="1" y2="0.5" xlink:href="#linear-gradient"/>
+  </defs>
+  <g id="Mask_Group_1" data-name="Mask Group 1" clip-path="url(#clip-path)">
+    <rect id="Rectangle_4" data-name="Rectangle 4" width="1920" height="1080" fill="#fff"/>
+    <text id="This" transform="translate(925 137)" font-size="36" font-family="SourceSerifPro-Regular, Source Serif Pro"><tspan x="0" y="0">This</tspan></text>
+    <text id="Certificate_of_Completion" data-name="Certificate of Completion" transform="translate(478 237)" font-size="85" font-family="SourceSerifPro-Semibold, Source Serif Pro" font-weight="600" letter-spacing="0.05em"><tspan x="0" y="0">C</tspan><tspan y="0" font-size="60">ERTIFICATE OF </tspan><tspan y="0">C</tspan><tspan y="0" font-size="60">OMPLETION</tspan></text>
+    <text id="is_presented_to" data-name="is presented to" transform="translate(843 318)" font-size="36" font-family="SourceSerifPro-Regular, Source Serif Pro"><tspan x="0" y="0">is presented to</tspan></text>
+    <text id="Employee_Name" data-name="Employee Name" transform="translate(740 442)" font-size="60" font-family="SourceSerifPro-Semibold, Source Serif Pro" font-weight="600"><tspan x="0" y="0">Employee Name</tspan></text>
+    <text id="for_successfully_completing_the_TRAINING_COURSE_" data-name="for successfully completing the [TRAINING_COURSE}" transform="translate(533 550)" font-size="36" font-family="SourceSerifPro-Regular, Source Serif Pro"><tspan x="0" y="0">for successfully completing the [TRAINING_COURSE}</tspan></text>
+    <text id="Awarded_this_Day_Month_and_Year_" data-name="Awarded this, [Day], [Month] and {Year]" transform="translate(659 613)" font-size="34" font-family="SourceSerifPro-Semibold, Source Serif Pro" font-weight="600"><tspan x="0" y="0">Awarded this, [Day], [Month] and {Year]</tspan></text>
+    <text id="Mangla_Paliwal" data-name="Mangla Paliwal" transform="translate(1263 971)" font-size="26" font-family="SourceSerifPro-Semibold, Source Serif Pro" font-weight="600"><tspan x="0" y="0">Mangla Paliwal</tspan></text>
+    <text id="Sr._Manager" data-name="Sr. Manager" transform="translate(1263 1003)" fill="#666" font-size="22" font-family="SourceSerifPro-Semibold, Source Serif Pro" font-weight="600"><tspan x="0" y="0">Sr. Manager</tspan></text>
+    <text id="Mukesh_Kumar_Tiwari" data-name="Mukesh Kumar Tiwari" transform="translate(478 975)" font-size="26" font-family="SourceSerifPro-Semibold, Source Serif Pro" font-weight="600"><tspan x="0" y="0">Mukesh Kumar Tiwari</tspan></text>
+    <text id="Training_Manager" data-name="Training Manager" transform="translate(478 1007)" fill="#666" font-size="22" font-family="SourceSerifPro-Semibold, Source Serif Pro" font-weight="600"><tspan x="0" y="0">Training Manager</tspan></text>
+    <g id="Layer_2" data-name="Layer 2" transform="translate(1702.845 903.613)">
+      <g id="Layer_1" data-name="Layer 1">
+        <path id="Path_1" data-name="Path 1" d="M13.42,38.72A345,345,0,0,1,33.273,69.227H13.42Z" transform="translate(8.782 25.338)" fill="#ee6f27"/>
+        <path id="Path_2" data-name="Path 2" d="M32.445,68.74,13.42,57.159V0H58.452A24.816,24.816,0,0,1,82.474,18.581C78.354,21.937,58.9,38.382,32.445,68.74Z" transform="translate(8.782)" fill="url(#linear-gradient)"/>
+        <path id="Path_3" data-name="Path 3" d="M75.448,16.858V61.791A24.816,24.816,0,0,1,50.632,86.607H25.37C33.807,57.457,70.551,17.024,75,12.16A25.5,25.5,0,0,1,75.448,16.858Z" transform="translate(16.602 7.957)" fill="url(#linear-gradient-2)"/>
+        <path id="Path_4" data-name="Path 4" d="M0,81.707V66.42H4.6a7.693,7.693,0,0,1,3.755.96,6.138,6.138,0,0,1,2.531,2.5,7.66,7.66,0,0,1,.893,3.739v.976a7.726,7.726,0,0,1-.893,3.789,5.956,5.956,0,0,1-2.531,2.5,7.974,7.974,0,0,1-3.838.893ZM2.151,68.074V80.069H4.417a5.1,5.1,0,0,0,3.855-1.456,5.741,5.741,0,0,0,1.39-4.136v-.893A5.906,5.906,0,0,0,8.355,69.53a4.814,4.814,0,0,0-3.706-1.456Z" transform="translate(0 43.464)" fill="#595a5c"/>
+        <path id="Path_5" data-name="Path 5" d="M18.7,77.719H11.885l-1.539,3.987H8.13L14.35,66.42h1.836l6.22,15.286H20.257Zm-6.171-1.654h5.542l-2.779-7.147Z" transform="translate(5.32 43.464)" fill="#595a5c"/>
+        <path id="Path_6" data-name="Path 6" d="M29.03,68.074H23.8V81.706H21.668V68.074H16.44V66.42H29.03Z" transform="translate(10.758 43.464)" fill="#595a5c"/>
+        <path id="Path_7" data-name="Path 7" d="M34.621,77.719H27.789L26.25,81.706H24L30.22,66.42H32.09l6.237,15.286H36.176Zm-6.187-1.654h5.493l-2.779-7.147Z" transform="translate(15.705 43.464)" fill="#595a5c"/>
+        <path id="Path_8" data-name="Path 8" d="M43.016,74.957H36.167v6.75H34V66.42H44.092v1.654H36.167v5.244h6.849Z" transform="translate(22.249 43.464)" fill="#ee6f27"/>
+        <path id="Path_9" data-name="Path 9" d="M43.877,80.069h7.709v1.654H41.66V66.42h2.217Z" transform="translate(27.262 43.464)" fill="#ee6f27"/>
+        <path id="Path_10" data-name="Path 10" d="M62.591,74.641a7.991,7.991,0,0,1-.91,3.921,6.088,6.088,0,0,1-2.564,2.564A8.272,8.272,0,0,1,55.229,82a8.057,8.057,0,0,1-3.822-.893,6.171,6.171,0,0,1-2.6-2.531,7.809,7.809,0,0,1-.96-3.805V73.682a8.057,8.057,0,0,1,.926-3.9,6.3,6.3,0,0,1,2.63-2.581,8.768,8.768,0,0,1,7.742,0,6.171,6.171,0,0,1,2.581,2.581,8.073,8.073,0,0,1,.91,3.921Zm-2.4-.993a6.038,6.038,0,0,0-1.324-4.169,5.261,5.261,0,0,0-7.263,0,5.906,5.906,0,0,0-1.357,4.037v1.125a6.138,6.138,0,0,0,1.324,4.152,5.277,5.277,0,0,0,7.3.083,6.171,6.171,0,0,0,1.324-4.086Z" transform="translate(31.312 43.382)" fill="#ee6f27"/>
+        <path id="Path_11" data-name="Path 11" d="M62.195,76.892l.314,2.068.463-1.82L66.281,66.47h1.8l3.16,10.671.331,1.82.347-2.068,2.515-10.456H76.6L72.651,81.723H70.732L67.423,70.589l-.265-1.175-.248,1.175L63.3,81.706H61.417L57.48,66.42h2.151Z" transform="translate(37.614 43.464)" fill="#ee6f27"/>
+      </g>
+    </g>
+    <line id="Line_1" data-name="Line 1" x2="350" transform="translate(478 930)" fill="none" stroke="#666" stroke-linecap="round" stroke-width="2"/>
+    <line id="Line_2" data-name="Line 2" x2="350" transform="translate(1092 930)" fill="none" stroke="#666" stroke-linecap="round" stroke-width="2"/>
+    <rect id="Rectangle_1" data-name="Rectangle 1" width="1267" height="91" transform="translate(-331.456 506.814) rotate(-39)" fill="#ff9f68"/>
+    <rect id="Rectangle_2" data-name="Rectangle 2" width="1267" height="91" transform="translate(-691.456 957.814) rotate(-39)" fill="#707070"/>
+    <rect id="Rectangle_3" data-name="Rectangle 3" width="1267" height="91" transform="translate(-816.456 1218.814) rotate(-39)" fill="#ff9f68"/>
+    <path id="Path_12" data-name="Path 12" d="M337.979-427.542V33.934H280.053q-76.333,0-118.831-61.666t-42.5-174.789q0-225.021,158.621-225.021Z" transform="translate(1400.274 253.374)" fill="none" stroke="#ed6f27" stroke-width="1"/>
+    <path id="Path_13" data-name="Path 13" d="M603.9-427.542V249.309H475.718q-168.913,0-262.953-90.446T118.725-97.5q0-330.039,351-330.04Z" transform="translate(1292.875 -100)" fill="none" stroke="#ed6f27" stroke-width="1"/>
+    <path id="Path_14" data-name="Path 14" d="M306.7-427.542v262.233H257.035q-65.442,0-101.877-35.042t-36.434-99.324q0-127.868,135.99-127.868Z" transform="translate(1535.477 526.309)" fill="none" stroke="#ed6f27" stroke-width="1"/>
+    <path id="Path_15" data-name="Path 15" d="M306.7-427.542v262.233H257.035q-65.442,0-101.877-35.042t-36.434-99.324q0-127.868,135.99-127.868Z" transform="translate(1629.477 378.309)" fill="none" stroke="#ed6f27" stroke-width="1"/>
+    <path id="Path_16" data-name="Path 16" d="M355.106-427.542V-97.775H292.655q-82.3,0-128.113-44.066t-45.817-124.9q0-160.8,171.012-160.8Z" transform="translate(1639.273 533.542)" fill="none" stroke="#ed6f27" stroke-width="1"/>
+  </g>
+</svg>

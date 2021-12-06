@@ -1,0 +1,174 @@
+{% extends 'adminboard/home.html' %}
+{% load staticfiles %}
+
+{% block extrastyle %}
+<title>Final Questions Upload</title>
+{% endblock %}
+
+{% block html %}
+<!-- Final Quest Form -->
+<ul class="uk-flex" uk-tab data-uk-tab="{connect:'#quest-upload'}">
+    <li class="uk-active"><a href="#">Single Upload</a></li>
+    <li><a href="#">Bulk Upload</a></li>
+</ul>
+
+<ul id="quest-upload" class="uk-switcher uk-margin">
+    <li>
+        <form class="uk-width-1-2@l uk-form-stacked" id="finalQuest" method="post" action="{% url 'adminboard:postquest' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="uk-fieldset" data-class="form-fieldset">
+                <legend class="uk-legend">Final Questions</legend>
+        
+                <div class="uk-margin">
+                    <label for="" class="uk-form-label">Module Name</label>
+                    <select name="module-name" class="uk-select">
+                        <option value="" hidden>--Select Module--</option>
+                        {% for i in modules %}
+                        <option value="{{ i.module_name }}">{{ i.module_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+        
+                <div class="uk-margin">
+                    <label for="" class="uk-form-label">Enter Question</label>
+                    <div class="uk-form-controls">
+                        <textarea class="uk-textarea" name="question" rows="5" placeholder="Final questions..." required=true></textarea>
+                    </div>
+                </div>
+                
+                <div class="uk-flex uk-margin" uk-margin>
+                    <div class="uk-flex-1 uk-margin-right" >
+                        <label for="" class="uk-form-label">Option 1</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input form_options" name="c-option1" placeholder="first" required=true autocomplete=off>
+                        </div>
+                    </div>
+        
+                    <div class="uk-flex-1" >
+                        <label for="" class="uk-form-label">Option 2</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input form_options" name="c-option2" placeholder="second" required=true autocomplete=off>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="uk-flex uk-margin" uk-margin>    
+                    <div class="uk-flex-1 uk-margin-right" uk-margin>
+                        <label for="" class="uk-form-label">Option 3</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input form_options" name="c-option3" placeholder="third" autocomplete=off>
+                        </div>
+                    </div>
+        
+                    <div class="uk-flex-1" uk-margin>
+                        <label for="" class="uk-form-label">Option 4</label>
+                        <div class="uk-form-controls">
+                            <input class="uk-input form_options" name="c-option4" placeholder="fourth" autocomplete=off>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="uk-flex uk-margin" uk-margin>
+                    <div class="uk-flex-1 uk-margin-right" uk-margin>
+                        <label for="" class="uk-form-label">Correct Option</label>
+                        <div class="uk-form-controls">
+                            <!-- <input class="uk-input" name="c-correct" placeholder="second" required=true autocomplete=off> -->
+                            <select name="correct" class="uk-select" id="correct_opt" required=true autocomplete="off">
+                                <option value="" hidden>--correct option--</option>
+                                {% if quest %}
+                                <option value="{{quest.option1}}">{{quest.option1}}</option>
+                                <option value="{{quest.option2}}">{{quest.option2}}</option>
+                                <option value="{{quest.option3}}">{{quest.option3}}</option>
+                                <option value="{{quest.option4}}">{{quest.option4}}</option>
+                                {% else %}
+                                <option value="">None</option>
+                                <option value="">None</option>
+                                <option value="">None</option>
+                                <option value="">None</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div> 
+                    <div class="uk-flex-1" uk-margin uk-form-custom="target: true">
+                        <label for="" class="uk-form-label">Optional Media (.mp4, .jpg, .png, .mp3 only)</label>
+                        <input type="file" name="quest_file" accept=".mp4, .jpg, .jpeg, .png, .mp3">
+                        <input class="uk-input elem-disabled finalquest_text" type="text" placeholder="Select Media..." disabled>
+                        <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                    </div>
+                </div>
+            </fieldset>
+        
+            <div class="uk-margin">
+                {% if quest %}
+                <input type="text" class="uk-hidden" name="id" value="{{quest.id}}">
+                <button class="uk-button uk-button-primary" name="update">Update</button>
+                <button type="button" class="uk-button uk-button-default-2" onclick="history.back()">Cancel</button>
+                {% else %}
+                <button class="uk-button uk-button-primary" name="submit">Submit</button>
+                {% endif %}
+            </div>
+        </form>
+    </li>
+    <li>
+        <form class="uk-width-1-2@l uk-form-stacked" id="finalQuest2" method="post" action="{% url 'adminboard:upload_bulk_quest' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="uk-fieldset" data-class="form-fieldset">
+                <legend class="uk-legend">Final Questions (Bulk upload) 
+                    <i class="fas fa-info-circle bulk-info" title="View Structure" uk-toggle="target: .structure-info"></i>
+                </legend>
+
+                <div class="uk-card uk-card-default uk-padding-small structure-info" hidden>
+                    <p>Structue CSV</p>
+                    <ul>
+                        <li>module_name</li>
+                        <li>question</li>
+                        <li>option1</li>
+                        <li>option2</li>
+                        <li>option3</li>
+                        <li>option4</li>
+                        <li>correct_option</li>
+                    </ul>
+                </div>
+        
+                <div class="uk-margin">
+                    <div class="uk-width-1-2" uk-form-custom="target: true">
+                        <input type="file" name="bulk-upload" required>
+                        <input class="uk-input bulk-div" type="text" placeholder="Select file" disabled>
+                        <i class="fas fa-paperclip uk-position-absolute bulk-clip"></i>
+                    </div>
+                    <button class="uk-button uk-button-primary">Submit</button>
+                </div>
+            </fieldset>
+        </form>
+    </li>
+</ul>
+{% endblock %}
+
+{% block loader %}{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'adminboard/js/form.js' %}"></script>
+<script src="{% static 'adminboard/js/ui.js' %}"></script>
+<script>
+    {% if quest %}
+    const mod = document.querySelector('[name="module-name"]'),
+          question = document.querySelector('[name="question"]'),
+          cOption1 = document.querySelector('[name="c-option1"]'),
+          cOption2 = document.querySelector('[name="c-option2"]'),
+          cOption3 = document.querySelector('[name="c-option3"]'),
+          cOption4 = document.querySelector('[name="c-option4"]'),
+          correct = document.querySelector('#correct_opt'),
+          finalquest_text = document.querySelector('.finalquest_text');
+
+    // Set values
+    mod.value = `{{quest.module_name | safe}}`;
+    question.value = `{{quest.question | safe}}`;
+    cOption1.value = `{{quest.option1 | safe}}`;
+    cOption2.value = `{{quest.option2 | safe}}`;
+    cOption3.value = `{{quest.option3 | safe}}`;
+    cOption4.value = `{{quest.option4 | safe}}`;
+    correct.value = `{{quest.correct_option | safe}}`;
+    finalquest_text.value = `{{quest.quest_file | safe}}`;
+    {% endif %}
+</script>
+{% endblock %}

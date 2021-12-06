@@ -1,0 +1,95 @@
+{% extends 'employee/home.html' %}
+{% load staticfiles %}
+
+{% block title %}Your Contributions{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'adminboard/css/chosen.min.css' %}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+{% endblock %}
+
+{% block hero %}{% endblock %}
+
+{% block body %}
+<div class="flex items-center sticky px-16 py-6 z-10" style="top: calc(70px); background-color: var(--custom-white-1);">
+    <ul class="flex font-medium text-lg text-gray-700 tab border-b border-gray-900 w-full" id="tab-contrib">
+        <li class="tab-list active" data-id="make">Make Contributions</li>
+        <li class="tab-list" data-id="your">Your Contributions</li>
+    </ul>
+</div>
+<section class="px-16 py-6">
+    <ul>
+        <li data-target="make" class="tab-content" id="makeTab" style="min-height: calc(100vh - 98px - 8rem);">
+            {% include 'employee/components/contrib_form.html' %}
+        </li>
+        <li data-target="your" class="tab-content hidden" id="yourTab" style="min-height: calc(100vh - 98px - 8rem);">
+            {% if contribution %}
+                <ul class="grid grid-cols-4 gap-10">
+                    {% for i in contribution %}
+                    <li>
+                        <section class="border border-gray-500 rounded-lg p-4 relative">
+                            <div class="contrib">
+                                <p class="text-2xl font-medium mb-1">{{i.title}}</p>
+                                <p class="mb-2">
+                                    <span class="block font-semibold text-blue-800">{{i.submission_date}}</span>
+                                </p>
+                                <p class="mb-2 flex flex-wrap gap-2">
+                                    {% load custom_tags %}
+                                    {% with i.process_name|split:"," as processes %}
+                                    {% for process in processes %}
+                                        <span class="block bg-gray-300 px-4 py-1 text-sm text-gray-900 rounded course_team mb-1">{{process}}</span>
+                                    {% endfor %}
+                                    {% endwith %}
+                                </p>
+        
+                                <div class="mt-4">
+                                    {% if i.case_study %}
+                                    <p class="text-sm">Case Study : <a href="{{i.case_study.url}}" class="block text-lg font-medium text-blue-600" download>{{i.case_study}}</a></p>
+                                    {% endif %}
+                                    {% if i.supporting_docs %}
+                                    <p class="text-sm">Other Docs : <a href="{{i.supporting_docs.url}}" class="block text-lg font-medium text-blue-600" download>{{i.supporting_docs}}</a></p>
+                                    {% endif %}
+                                </div>
+        
+                                {% if i.remark %}
+                                <p class="mt-4 text-sm">Remark: 
+                                    <span class="block text-lg">{{i.remark}}</span>
+                                </p>
+                                {% endif %}
+                            </div>
+                            
+                            <p class="absolute 
+                                {% if i.status == 'Pending' %}
+                                bg-yellow-500
+                                {% elif i.status == 'Accepted' %}
+                                bg-blue-500 text-white
+                                {% else %}
+                                bg-red-500 text-white
+                                {% endif %} 
+                                px-2 py-1 text-sm rounded-md" 
+                                style="top: 10px; right: -10px;"
+                            >{{i.status}}</p>
+                        </section>
+                    </li>
+                    {% endfor %}
+                </ul>
+            {% else%}
+                <div class="flex flex-col items-center justify-center" style="height: calc(100vh - 98px - 8rem);">
+                    <img src="{% static 'employee/images/emoji.png' %}" alt="emoji">
+                    <h2>You have not made any contribution yet.</h2>
+                    <button type="button" class="btn btn--secondary" style="width: 25%;" id="gotomake">Make one now</button>
+                </div>
+            {% endif %}
+        </li>
+    </ul>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'adminboard/js/chosen.jquery.min.js' %}"></script>
+<script src="{% static 'employee/js/contrib.js' %}"></script>
+<script>
+    // Member values
+    $('.process-select').chosen();
+    document.getElementById('output-process').innerHTML = location.search;
+</script>
+{% endblock %}

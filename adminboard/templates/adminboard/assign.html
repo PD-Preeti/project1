@@ -1,0 +1,134 @@
+{% extends 'adminboard/home.html' %}
+{% load staticfiles %}
+
+{% block extrastyle %}
+<!-- Chosen CSS -->
+<link rel="stylesheet" href="{% static 'adminboard/css/chosen.min.css' %}">
+
+<!-- DatePicker -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<title>Assign Course</title>
+{% endblock %}
+
+{% block html %}
+    <form class="uk-width-1-2@l uk-form-stacked" id="assignCourse" method="post" action="{% url 'adminboard:postassign' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <fieldset class="uk-fieldset">
+            <legend class="uk-legend">Assign Course</legend>
+            <!-- {% for i in progress %}
+            {{ i.person_email }}
+            {{ i.course_name }}
+        {% endfor %} -->
+
+            <div class="uk-margin">
+                <label for="" class="uk-form-label">Select Course</label>
+                <div class="uk-form-controls">
+                    <select class="uk-select" name="course" required=true>
+                        <option value="">--All Courses--</option>
+                        {% for i in courses %}
+                        <option value="{{ i.course_name }}">{{ i.course_name }}</option>
+
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>  
+
+            <div class="uk-margin">
+                <label for="" class="uk-form-label">Expiration Date <em>(optional)</em></label>
+                <div class="uk-form-controls">
+                    <input type="text" id="expiredDate" name="expired_date" class="uk-input" placeholder="Please select Date" data-input>
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                <label for="" class="uk-form-label">Assign to?</label>
+                <div class="uk-grid-small uk-child-width-auto uk-grid">
+                    <label><input class="uk-radio" type="radio" name="assign_to" value="teams" required> Teams</label>
+                    <label><input class="uk-radio" type="radio" name="assign_to" value="users"> Users</label>
+                </div>
+            </div>
+
+            <div class="uk-margin uk-hidden" id="teams-div">
+                <label for="" class="uk-form-label">Select Teams</label>
+                <div class="uk-form-controls">
+                    <div id="output"></div>
+                    <select data-placeholder="add teams..." name="tags[]" multiple class="chosen-select uk-select dis team-select">
+                        {% for i in teams %}
+                        <option value="{{ i }}">{{ i }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>    
+
+            <div class="uk-margin uk-hidden" id="users-div">
+                <label for="" class="uk-form-label">Select User</label>
+                <div class="uk-form-controls">
+                    <div id="output2"></div>
+                    <select data-placeholder="add users..." name="tags2[]" multiple class="chosen-select uk-select dis user-select" >
+                        {% for i in employee_detail_dict %}
+                            <option value="{{ i.0 }},{{ i.1 }},{{ i.2 }},{{ i.3 }},{{ i.4 }},{{ i.5 }},{{ i.6 }}">{{ i.0 }} ({{ i.1 }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <label for="trigger_email uk-margin-top uk-display-block">
+                    <input type="checkbox" name="trigger_email" id="trigger_email">
+                    <span>Email Trigger</span>
+                </label>
+            </div>    
+
+            <div class="uk-margin uk-alert warning-alert uk-hidden" id="assignWarn">
+                <p class="warning-alert__line-1">This course has already been assigned to selected users <span id="assignedUsers" class="uk-text-bold"></span>. 
+                    If you proceed, the user progress gets reset.
+                </p>
+                <p class="warning-alert__line-2">Do you wish to proceed?</p>
+                <div>
+                    <button type="button" class="proceed-not uk-margin-small-right" onclick="window.location.reload()">Don't Proceed</button>
+                    <button type="submit" class="proceed" onclick="proceed=true">Proceed</button>
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                <button class="uk-button uk-button-primary" id="assignBtn" onclick="proceed=false">Assign</button>
+            </div>
+
+        </fieldset>
+
+    </form>
+
+{% endblock %}
+
+{% block loader %}{% endblock %}
+
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script src="{% static 'adminboard/js/chosen.jquery.min.js' %}"></script>
+<script src="{% static 'adminboard/js/form.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="{% static 'adminboard/js/ui.js' %}"></script>
+<!-- Expiration Date Input Script -->
+<script>
+    const expiredDate = document.querySelector('#expiredDate');
+    expiredDate.flatpickr({
+        dateFormat: "Y-m-d",
+        minDate: new Date()
+    });
+
+    $('#expiredDate:visible').on('focus', function () {
+        $(this).blur()
+    })
+    $('#expiredDate:visible').prop('readonly', false)
+</script>
+<!-- Assign Data -->
+<script>
+    const assignedData = [];
+    {% for i in assigned_courses %}
+        assignedData.push({
+            "course_name": `{{i.course_name}}`,
+            "person_email": `{{i.person_email}}`
+        })
+    {% endfor %}
+</script>
+<script src="{% static 'adminboard/js/course.assign.js' %}"></script>
+{% endblock %}

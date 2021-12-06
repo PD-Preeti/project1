@@ -1,0 +1,133 @@
+{% extends 'employee/home.html' %}
+{% load staticfiles %}
+
+{% block title %}Studyhall Dashboard{% endblock %}
+
+{% block styles %}
+	<!--Regular Datatables CSS-->
+	<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
+	<!--Responsive Extension Datatables CSS-->
+	<link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet">
+	<!-- Choosen -->
+	<link rel="stylesheet" href="{% static 'adminboard/css/chosen.min.css' %}">
+	<!-- Dashboard -->
+	<link rel="stylesheet" href="{% static 'employee/css/comps/_dashboard.css' %}">
+{% endblock %}
+
+{% block hero %}{% endblock %}
+
+{% block body %}
+	<div id="filterSection" class="mt-8 flex px-16 {% if search_on %}hidden{% endif %}">
+		<form action="{% url 'employee:dashboard' %}" method="POST" id="dashboardSearch" class="flex-1">
+			<div class="flex items-center w-2/5 bg-gray-300 relative">
+				<div class="w-full">
+					<div id="output-user_search"></div>
+					<select data-placeholder="Enter Employee Name/Designation/Team" name="user_search[]" id="userSearch" multiple class="chosen-select user_search" required>
+						{% for i in employee_detail_dict %}
+							<option value="{{ i.1 }}">{{ i.0 }} - {{ i.2 }}({{ i.3 }})</option>
+						{% endfor %}
+					</select>
+				</div>
+				<button type="submit" class="search_icon"><i class="fas fa-search"></i></button>
+			</div>
+		</form>
+		{% if search_on == False %}
+			<a href="{% url 'employee:dashboard' %}" class="bg-blue-500 rounded-md font-semibold text-white mx-2 h-10 p-2 px-4 border-2 border-blue-600 hover:shadow-xl hover:border-4 text-md">All</a>
+		{% endif %}
+	</div>
+	<section class="px-16 py-8" style="height: calc(100vh - 70px);">
+		<!-- Visual Cards -->
+		<div class="report_container grid grid-cols-12 gap-x-4">
+			<article class="report_container__card bg-green-500">
+				<h4 class="font-semibold">Total Enrolled Courses</h4>
+				<p class="text-4xl font-bold">{{ total_enrolled_courses }}</p>
+				<i class="fas fa-folder-plus icon"></i>
+			</article>
+			<article class="report_container__card bg-yellow-500">
+				<h4 class="font-semibold">Active Courses</h4>
+				<p class="text-4xl font-bold">{{ active_courses }}</p>
+				<i class="fas fa-book-reader icon"></i>
+			</article>
+			<article class="report_container__card bg-blue-500">
+				<h4 class="font-semibold">Completed Courses</h4>
+				<p class="text-4xl font-bold">{{ completed_courses }}</p>
+				<i class="fas fa-check-double icon"></i>
+			</article>
+			<article class="report_container__card bg-purple-500">
+				<h4 class="font-semibold">Average Score</h4>
+				<p class="text-4xl font-bold">{{avg_score|floatformat}}%</p>
+				<i class="fas fa-star icon"></i>
+			</article>
+		</div>
+
+		<!-- Datatable -->
+		<div id="dashboard_container" class="mt-8">
+			<table id="dashboard_report" class="stripe hover" style="width:100%; padding-top: 1em;  padding-bottom: 1em;">
+				<thead>
+					<tr>
+						<th data-priority="1">Course Name</th>
+						<th data-priority="2">Enrolled by</th>
+						<th data-priority="3">Enrolled Date</th>
+						<th data-priority="4">Completion Date</th>
+						<th data-priority="5">Progress</th>
+						<th data-priority="6">Pending Modules</th>
+						<th data-priority="9" class="hidden">Pending Modules Names</th>
+						<th data-priority="7">Course Status</th>
+						<th data-priority="7">Test Status</th>
+						<th data-priority="8">Score</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for i in tableInfo %}
+						<tr>
+							<td>{{ i.course_name }}</td>
+							<td>{{ i.person_name }}</td>
+							<td>{{ i.couse_assigndate|date }}</td>
+							{% if i.is_completed == 'Pending' %}
+								<td>NA</td>
+							{% else %}
+								<td>{{ i.course_completedtime|date }}</td>
+							{% endif %}
+							<td class="text-right">{{ i.progress }}%</td>
+							<td title="{{ i.pending_mods_name }}" class="text-right">{{ i.pending_mods }}</td>
+							<td class="hidden">{{ i.pending_mods_name }}</td>
+							<td>{{ i.is_completed }}</td>
+							{% if i.ques_in_c != 0 %}
+								<td>
+									{% if i.testgiven_status %}
+									Completed
+									{% else %}
+									Pending
+									{% endif %}
+								</td>
+							{% else %}
+								<td>NA</td>
+							{% endif %}
+
+							{% if i.score_after_test != 'NA' and i.is_completed != 'Pending' %}
+								<td class="text-right">{{ i.score_after_test }}%</td>
+							{% elif i.is_completed == 'Pending' %}
+								<td class="text-right">NA</td>
+							{% else %}
+								<td class="text-right">{{ i.score_after_test }}</td>
+							{% endif %}
+						</tr>			
+					{% endfor %}
+				</tbody>
+				
+			</table>
+		</div>
+		
+    </section>
+{% endblock %}
+
+{% block scripts %}
+<!--Datatables -->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+<script src="{% static 'adminboard/js/chosen.jquery.min.js' %}"></script>
+<script src="{% static 'employee/js/dashboard.js' %}"></script>
+{% endblock %}

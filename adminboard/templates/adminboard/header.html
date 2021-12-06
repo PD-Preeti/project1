@@ -1,0 +1,131 @@
+<!-- Top Header -->
+<header uk-sticky="media: 960" class="uk-navbar-container tm-navbar-container uk-sticky uk-active uk-sticky-below uk-sticky-fixed" data-class="header">
+    <div class="uk-container uk-container-expand uk-navbar-left uk-flex">
+        <div class="uk-navbar-item uk-flex-1 uk-flex-left">
+            <a href="{% url 'adminboard:adminhome' %}" class="uk-logo">boardroom</a>
+        </div>
+        <a uk-navbar-toggle-icon="" href="#offcanvas" uk-toggle="" class="uk-navbar-toggle uk-hidden@m uk-icon uk-navbar-toggle-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="navbar-toggle-icon">
+                <rect y="9" width="20" height="2"></rect><rect y="3" width="20" height="2"></rect><rect y="15" width="20" height="2"></rect>
+            </svg>
+        </a>
+    </div>
+</header>
+
+<!-- SideNavbar -->
+<nav class="tm-sidebar-left uk-visible@m">
+    <ul class="uk-nav-default uk-nav-parent-icon tm-nav" uk-nav>
+        <li class="router-link-exact-active" data-list="nav-list" data-id="home"><a href="{% url 'adminboard:adminhome' %}">Home</a></li>
+        <hr class="tm-nav-hr">
+
+        <li class="" data-list="nav-list" data-id="createcourse"><a href="{% url 'adminboard:createcourse' %}">Create Course</a></li>
+        <hr class="tm-nav-hr">
+
+        <li class="" data-list="nav-list" data-id="assigncourse"><a href="{% url 'adminboard:assign' %}">Assign Course</a></li>
+        <hr class="tm-nav-hr">
+
+        <li class="uk-parent" data-list="nav-list">
+            <a>Create Module</a>
+            <ul class="uk-nav-sub tm-nav">
+                <li data-list="nav-list" data-id="addmodule"><a href="{% url 'adminboard:addmodule' %}">Training Content</a></li data-list="nav-list">
+                <hr class="tm-nav-sub-hr">
+
+                <li data-list="nav-list" data-id="casestudy"><a href="{% url 'adminboard:casestudy' %}">Case Studies</a></li>
+                <hr class="tm-nav-sub-hr">
+
+                <li data-list="nav-list" data-id="finalquest"><a href="{% url 'adminboard:finalquest' %}">Final Questions</a></li>
+            </ul>
+        </li>
+        <hr class="tm-nav-hr">
+
+        <li class="uk-parent" data-list="nav-list">
+            <a>View</a>
+            <ul class="uk-nav-sub tm-nav">
+                <li data-list="nav-list" data-id="viewmodule"><a href="{% url 'adminboard:viewmodule' %}">Modules</a></li data-list="nav-list">
+                <hr class="tm-nav-sub-hr">
+
+                <li data-list="nav-list" data-id="viewcasestudy"><a href="{% url 'adminboard:getcasestudy' %}">Case Studies</a></li>
+                <hr class="tm-nav-sub-hr">
+
+                <li data-list="nav-list" data-id="viewfinalquest"><a href="{% url 'adminboard:getallquest' %}">Final Questions</a></li>
+            </ul>
+        </li>
+        <hr class="tm-nav-hr">
+
+        <li class="" data-list="nav-list" data-id="people"><a href="{% url 'adminboard:people' %}">Training Progress</a></li>
+        <hr class="tm-nav-hr">
+        <li class="" data-list="nav-list" data-id="submission"><a href="{% url 'adminboard:submission' %}">CaseStudy Submissions</a></li>
+        <hr class="tm-nav-hr">
+        <li class="" data-list="nav-list" data-id="userassessment"><a href="{% url 'adminboard:userassessment' %}">User Assessment</a></li>
+        <hr class="tm-nav-hr">
+        <li class="" data-list="nav-list" data-id="questions"><a href="{% url 'adminboard:questions' %}">Question Submissions</a></li>
+        <hr class="tm-nav-hr">
+        <li class="" data-list="nav-list" data-id="configuration"><a href="{% url 'adminboard:configuration' %}">Configurations</a></li>
+    </ul>
+
+    <div class="uk-position-bottom uk-padding-small uk-text-left uk-background-muted logout-div">
+        <ul class="uk-nav-default uk-nav-parent-icon tm-nav logout-ul">
+            <li>
+                <a href="{% url 'adminboard:logout_admin' %}" class="logout"><span uk-icon="icon: sign-out" class="uk-margin-small-right"></span>Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Offcanvas Navigation -->
+<div id="offcanvas" uk-offcanvas="mode: push; overlay: true" class="uk-offcanvas">
+    <div class="uk-offcanvas-bar">
+        <div class="uk-panel">
+            <ul class="uk-nav uk-nav-default tm-nav">
+                <li><a href="{% url 'adminboard:adminhome' %}">Home</a></li>
+                <hr class="divider">
+
+                <li><a href="{% url 'adminboard:createcourse' %}">Create Courses</a></li>
+                <hr class="divider">
+
+                <li><a href="{% url 'adminboard:assign' %}">Assign Courses</a></li>
+                <hr class="divider">
+
+                <li>
+                    <a>Create Module</a>
+                    <ul class="uk-nav-sub">
+                        <li><a href="{% url 'adminboard:addmodule' %}">Training Content</a></li>
+                        <li><a href="{% url 'adminboard:casestudy' %}">Case Studies</a></li>
+                        <li><a href="{% url 'adminboard:finalquest' %}">Final Questions</a></li>
+                    </ul>
+                </li>
+                <hr class="divider">
+
+                <li>
+                    <a>View</a>
+                    <ul class="uk-nav-sub">
+                        <li><a href="{% url 'adminboard:viewmodule' %}">Modules</a></li>
+                        <li><a href="{% url 'adminboard:getcasestudy' %}">Case Studies</a></li>
+                        <li><a href="{% url 'adminboard:getallquest' %}">Final Questions</a></li>
+                    </ul>
+                </li>
+                <hr class="divider">
+                
+                <li><a href="{% url 'adminboard:people' %}">Training Progress</a></li>
+                <hr class="divider">
+                <li><a href="{% url 'adminboard:submission' %}">Submissions</a></li>
+                <hr class="divider">
+                <li><a href="{% url 'adminboard:userassessment' %}">User Assessment</a></li>
+                <hr class="divider">
+                <li><a href="{% url 'adminboard:questions' %}">Question Submissions</a></li>
+                <hr class="divider">
+                <li><a href="{% url 'adminboard:configuration' %}">Configurations</a></li>
+            </ul>
+        </div>
+        <div class="uk-position-bottom uk-padding-small uk-text-left uk-background-muted">
+            <ul class="uk-nav-default uk-nav-parent-icon tm-nav logout-ul">
+                <li>
+                    <a href="{% url 'adminboard:logout_admin' %}" class="logout"><span uk-icon="icon: sign-out" class="uk-margin-small-right"></span>Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% load staticfiles %}
+<script src="{% static 'adminboard/js/route.js' %}"></script>

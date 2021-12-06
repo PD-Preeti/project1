@@ -1,0 +1,79 @@
+<section class="flex gap-20 relative">
+    <section class="flex-1">
+        <form action="{% url 'employee:contribute' %}" method="POST" class="w-3/4"  enctype="multipart/form-data">
+            <div class="flex flex-col mb-4">
+                <label for="" class="text-md font-medium mb-1">Case Study Title</label>
+                <input type="text" name="title" class="border border-black py-3 px-6 rounded-lg" placeholder="Study 123" required>
+            </div>
+            <div class="flex flex-col mb-4">
+                <label for="" class="text-md font-medium mb-1">Process name</label>
+                <div>
+                    <div id="output-process"></div>
+                    <select name="process_name" data-placeholder="Add process..." id="process" multiple class="chosen-select process-select">
+                        {% for i in process %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="flex flex-col mb-4">
+                <label for="" class="text-md font-medium mb-1">Upload File <em>(only .pptx, .ppt)</em></label>
+                <div class="relative">
+                    <input type="file" name="case_study"
+                        class="absolute opacity-0 top-0 bottom-0 left-0 right-0 w-full cursor-pointer"
+                        onchange="this.nextElementSibling.value = this.value.slice(-(this.value.length - 12))"
+                        accept=".pptx, .ppt"
+                    >
+                    <input type="text" name="case_study_text" class="border border-black py-3 px-6 rounded-lg w-full" placeholder="Choose File...">
+                </div>
+            </div>
+            <div class="flex flex-col mb-4">
+                <label for="" class="text-md font-medium mb-1">Upload supporting docs (optional)</label>
+                <div class="relative">
+                    <input type="file" name="supporting_docs" 
+                        class="absolute opacity-0 top-0 bottom-0 left-0 right-0 w-full cursor-pointer"
+                        onchange="this.nextElementSibling.value = this.value.slice(-(this.value.length - 12))"
+                    >
+                    <input type="text" name="supporting_docs_text" class="border border-black py-3 px-6 rounded-lg w-full" placeholder="Choose File...">
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn--primary">Submit</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="flex-1">
+        <h2 class="text-3xl font-bold uppercase mb-6">Guidelines</h2>
+
+        <div class="border rounded-lg border-gray-500 relative p-6 mb-6">
+            <legend class="absolute custom-legend">Case Study</legend>
+            <p class="mb-2">Case Study is a detailed analysis of a case or a check that you have worked on. It must include complete information around the following:</p>
+            <ul class="list-decimal px-4">
+                <li class="mb-2">What was the scenario?</li>
+                <li class="mb-2">What were the challenges associated with it?</li>
+                <li class="mb-2">What were the steps (in sequence) involved in getting the case completed?</li>
+                <li class="mb-2">What were the extra measures or initiatives required, if any, to complete the case?</li>
+                <li class="mb-2">What did you learn from the entire process of completing the case?</li>
+            </ul>
+        </div>
+
+        <div class="border rounded-lg border-gray-500 relative p-6 mb-6">
+            <legend class="absolute custom-legend">Essential Training</legend>
+            <p class="mb-2">Essential training is a significant piece of information that is necessary for performing the day to day tasks. It must include complete information around the following:</p>
+            <ul class="list-decimal px-4">
+                <li class="mb-2">What is the information?</li>
+                <li class="mb-2">Which part of your process does it impact or is relevant to?</li>
+                <li class="mb-2">What are the examples?</li>
+            </ul>
+        </div>
+
+        <p class="mb-4 font-medium">Download the 'Study Hall - Information' template from the link given below. Fill the template and upload it with this form.</p>
+        <div class="flex gap-10">
+            {% load staticfiles %}
+            <a href="{% static 'employee/mockup/Information.pptx' %}" download class="btn btn--secondary text-blue-600"> <i class="fas fa-arrow-down mr-2"></i> 1. Information.pptx</a>
+            <a href="{% static 'employee/mockup/Case-Studies.pptx' %}" download class="btn btn--secondary text-blue-600"> <i class="fas fa-arrow-down mr-2"></i> 2. Case-Studies.pptx</a>
+        </div>
+    </section>
+</section>

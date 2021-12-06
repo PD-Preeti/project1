@@ -1,0 +1,49 @@
+{% load staticfiles %}
+<section class="hero">
+  <div class="owl-carousel custom-carousel">
+    <div class="item hero-content flex items-center px-16">
+      <div class="item item-caption">
+        <h1 class="hero--heading">Learning is essential to growth</h1>
+        <p class="hero--tag">Learn, Implement, Improve</p>
+        <button class="explore-btn" id="exploreBtn">
+          Explore <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Course Carousel Temp -->
+    {% if carousels|length >= minmax.min %} 
+    {% for i in carousels %} 
+    {% if forloop.counter <= minmax.max %}
+    <div
+      class="item flex items-end px-16 carousel-box"
+      style="height: 100%; background-image: url('{{i.carousel_cover.url}}');"
+    >
+      <div class="item-caption flex-1 z-10 pb-6">
+        <h1 class="hero--heading ">
+          {{i.carousel_title}}
+        </h1>
+        <p class="hero--tag ">
+          {{i.carousel_description}}
+        </p>
+        {% if i.carousel_type == 'Courses' %}
+        <a
+          class="explore-btn inline-block "
+          onclick="window.location.pathname = '/continuecourse/{{i.carousel_course}}'"
+          >Jump to Course <i class="fas fa-arrow-right"></i
+        ></a>
+        {% else %}
+        <a
+          class="explore-btn inline-block "
+          href="{{i.carousel_link}}"
+          target="_blank"
+          >Go to the document<i class="fas fa-arrow-right"></i
+        ></a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %} 
+    {% endfor %} 
+    {% endif %}
+  </div>
+</section>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Studyhall- Learning management system, for those who thrive to learn">
+    <meta name="author" content="Dataflow group">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="shortcut icon" href="{% static 'adminboard/images/DFLogo.svg' %}" type="image/x-icon">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{% static 'employee/css/main.css' %}">
+    <title>Login | Studyhall</title>
+</head>
+<body>
+    <div class="emp-login">
+        <section class="flex">
+            <div class="first_sect flex flex-col pl-16 justify-center h-full">
+                <section class="flex items-center absolute" style="top: 36px">
+                    <img src="{% static 'employee/images/DFLogo.svg' %}" alt="" srcset="" class="pr-1">
+                    <span class="logo-span">DATAFLOW</span>
+                </section>
+                <section class="flex-col items-center justify-center">
+                    <h1 class="emp-login__h1">
+                        <span class="emp-login__h1__span1">Welcome to</span>
+                        <span class="emp-login__h1__span2">
+                            <span class="pr-2"><img src="{% static 'employee/images/aeroplane.svg' %}" alt="aeroplane" class="aeroplane" srcset="{% static 'employee/images/aeroplane.svg' %}"></span>
+                            studyhall
+                        </span>
+                    </h1>
+                    <a href="{% url 'social:begin' 'google-oauth2' %}" class="emp-login__button mt-4">
+                        <i class="fab fa-google mr-2"></i>
+                        <span>Sign in with Google</span>
+                    </a>
+                </section>
+                <footer class="absolute" style="bottom: 36px;">&copy; 2020 DATA<span class="foot-span">FLOW</span> GROUP</footer>
+            </div>
+            <div class="second_sect">
+                <div class="second_sect--image">
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script src="{% static 'employee/js/common.js' %}"></script>
+</body>
+</html>

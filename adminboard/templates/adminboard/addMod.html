@@ -1,0 +1,352 @@
+{% extends 'adminboard/home.html' %}
+{% load staticfiles %}
+
+{% block extrastyle %}
+<title>Create Module</title>
+<!-- Chosen CSS -->
+<link rel="stylesheet" href="{% static 'adminboard/css/chosen.min.css' %}">
+{% endblock %}
+
+{% block html %}
+<!-- Toast -->
+{% if messages %}
+    <script>M.toast({html: "{{message.0}}", classes: 'green', displayLength:2000});</script>
+{% endif %}
+
+<!-- Module Creation form -->
+<form class="uk-width-5-6@l uk-form-stacked" id="moduleForm" method="post" action="{% url 'adminboard:savemodule' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="uk-hidden">
+        <input type="text" value="{{module.id}}" name="id">
+    </div>
+    <div class="module-creation-head uk-margin-bottom">
+        <legend class="uk-legend">Module Creation</legend>
+        <button type="button" class="add-process" id="addProcess" uk-toggle="target: .process-form"><i class="fas fa-plus uk-margin-small-right"></i>Add Process</button>
+    </div>
+
+    <fieldset class="uk-fieldset custom-fieldset">
+        <legend class="custom-legend">Module Details</legend>
+        <section class="custom-fieldset--section">
+            <div class="">
+                <label for="" class="uk-form-label">Enter Module Name</label>
+                <div class="uk-form-controls uk-position-relative">
+                    <input class="uk-input mod_name" name="modname" type="text" placeholder="Module XYZ" id="moduleName" required=true autocomplete="off">
+                    <span class="error-p uk-hidden">Module name already registered</span>
+                </div>
+            </div>
+
+            <div class="" id="process_name">
+                <label for="" class="uk-form-label">Select Process Name</label>
+                <div class="uk-form-controls">
+                    <div id="output-process"></div>
+                    <select data-placeholder="add processes..." name="process" id="mod-process" multiple class="chosen-select uk-select dis process-select" required>
+                        {% for i in process_name %}
+                        <option value="{{ i.process_name }}">{{ i.process_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div> 
+
+            <div class="" id="location_name">
+                <label for="" class="uk-form-label">Select Location</label>
+                <div class="uk-form-controls">
+                    <div id="output-location"></div>
+                    <select data-placeholder="add locations..." name="location" id="mod-location" multiple class="chosen-select uk-select dis location-select" required>
+                        {% for i in locations %}
+                        <option value="{{ i }}">{{ i }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div> 
+        </section>
+    </fieldset>
+
+    
+    <fieldset class="uk-fieldset custom-fieldset">
+        <div class="uk-flex custom-fieldset--upperDiv uk-margin-bottom">
+            <p class="custom-legend uk-margin-remove-bottom">Module Content <em>[.pdf, .mp4 only] (Limit 15)</em></p>
+            <button class="custom-add-button" type="button" id="addFileField"><i class="fas fa-plus-circle"></i> Add File Field</button>
+        </div>
+        <section class="custom-fieldset--section">
+            <div class="files" id="file1">
+                <div uk-form-custom="target: true" class="uk-width-1-1">
+                    <label for="" class="uk-form-label">Upload File 1</label>
+                    <input type="file" name="modfile1" accept=".mp4, .pdf" required>
+                    <input class="uk-input elem-disabled" type="text" placeholder="Select file..." disabled>
+                    <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                </div>
+            </div>
+
+            <div class="files uk-hidden" id="file2">
+                <div uk-form-custom="target: true" class="uk-width-1-1">
+                    <label for="" class="uk-form-label">
+                        <span>Upload File 2</span> 
+                        <span class="close-btn close-btn--2" onclick="removeFileFieldFun()"><i class="far fa-times-circle"></i></span>
+                    </label>
+                    <input type="file" name="modfile2" accept=".mp4, .pdf">
+                    <input class="uk-input elem-disabled" type="text" placeholder="Select file..." disabled>
+                    <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                </div>
+            </div>
+
+            <div class="files uk-hidden" id="file3">
+                <div uk-form-custom="target: true" class="uk-width-1-1">
+                    <label for="" class="uk-form-label">
+                        <span>Upload File 3</span> 
+                        <span class="close-btn close-btn--3" onclick="removeFileFieldFun()"><i class="far fa-times-circle"></i></span>
+                    </label>
+                    <input type="file" name="video_file" accept=".mp4, .pdf">
+                    <input class="uk-input elem-disabled" type="text" placeholder="Select file..." disabled>
+                    <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                </div>
+            </div>
+
+            <div class="files uk-hidden" id="file4">
+                <div uk-form-custom="target: true" class="uk-width-1-1">
+                    <label for="" class="uk-form-label">
+                        <span>Upload File 4</span> 
+                        <span class="close-btn close-btn--4" onclick="removeFileFieldFun()"><i class="far fa-times-circle"></i></span>
+                    </label>
+                    <input type="file" name="modfile3" accept=".mp4, .pdf">
+                    <input class="uk-input elem-disabled" type="text" placeholder="Select file..." disabled>
+                    <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                </div>
+            </div>
+
+            <div class="files uk-hidden" id="file5">
+                <div uk-form-custom="target: true" class="uk-width-1-1">
+                    <label for="" class="uk-form-label">
+                        <span>Upload File 5</span> 
+                        <span class="close-btn close-btn--5" onclick="removeFileFieldFun()"><i class="far fa-times-circle"></i></span>
+                    </label>
+                    <input type="file" name="modfile4" accept=".mp4, .pdf">
+                    <input class="uk-input elem-disabled" type="text" placeholder="Select file..." disabled>
+                    <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                </div>
+            </div>
+
+            <div class="files uk-hidden" id="file6">
+                <div uk-form-custom="target: true" class="uk-width-1-1">
+                    <label for="" class="uk-form-label">
+                        <span>Upload File 6</span> 
+                        <span class="close-btn close-btn--6" onclick="removeFileFieldFun()"><i class="far fa-times-circle"></i></span>
+                    </label>
+                    <input type="file" name="modfile5" accept=".mp4, .pdf">
+                    <input class="uk-input elem-disabled" type="text" placeholder="Select file..." disabled>
+                    <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                </div>
+            </div>
+
+            <div class="files uk-hidden" id="file7">
+                <div uk-form-custom="target: true" class="uk-width-1-1">
+                    <label for="" class="uk-form-label">
+                        <span>Upload File 7</span> 
+                        <span class="close-btn close-btn--7" onclick="removeFileFieldFun()"><i class="far fa-times-circle"></i></span>
+                    </label>
+                    <input type="file" name="modfile6" accept=".mp4, .pdf">
+                    <input class="uk-input elem-disabled" type="text" placeholder="Select file..." disabled>
+                    <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                </div>
+            </div>
+
+            <div class="files uk-hidden" id="file8">
+                <div uk-form-custom="target: true" class="uk-width-1-1">
+                    <label for="" class="uk-form-label">
+                        <span>Upload File 8</span> 
+                        <span class="close-btn close-btn--8" onclick="removeFileFieldFun()"><i class="far fa-times-circle"></i></span>
+                    </label>
+                    <input type="file" name="modfile7" accept=".mp4, .pdf">
+                    <input class="uk-input elem-disabled" type="text" placeholder="Select file..." disabled>
+                    <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                </div>
+            </div>
+
+            <div class="files uk-hidden" id="file9">
+                <div uk-form-custom="target: true" class="uk-width-1-1">
+                    <label for="" class="uk-form-label">
+                        <span>Upload File 9</span> 
+                        <span class="close-btn close-btn--9" onclick="removeFileFieldFun()"><i class="far fa-times-circle"></i></span>
+                    </label>
+                    <input type="file" name="modfile8" accept=".mp4, .pdf">
+                    <input class="uk-input elem-disabled" type="text" placeholder="Select file..." disabled>
+                    <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                </div>
+            </div>
+
+            <div class="files uk-hidden" id="file10">
+                <div uk-form-custom="target: true" class="uk-width-1-1">
+                    <label for="" class="uk-form-label">
+                        <span>Upload File 10</span> 
+                        <span class="close-btn close-btn--10" onclick="removeFileFieldFun()"><i class="far fa-times-circle"></i></span>
+                    </label>
+                    <input type="file" name="modfile9" accept=".mp4, .pdf">
+                    <input class="uk-input elem-disabled" type="text" placeholder="Select file..." disabled>
+                    <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                </div>
+            </div>
+
+            <div class="files uk-hidden" id="file11">
+                <div uk-form-custom="target: true" class="uk-width-1-1">
+                    <label for="" class="uk-form-label">
+                        <span>Upload File 11</span> 
+                        <span class="close-btn close-btn--11" onclick="removeFileFieldFun()"><i class="far fa-times-circle"></i></span>
+                    </label>
+                    <input type="file" name="modfile10" accept=".mp4, .pdf">
+                    <input class="uk-input elem-disabled" type="text" placeholder="Select file..." disabled>
+                    <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                </div>
+            </div>
+
+            <div class="files uk-hidden" id="file12">
+                <div uk-form-custom="target: true" class="uk-width-1-1">
+                    <label for="" class="uk-form-label">
+                        <span>Upload File 12</span> 
+                        <span class="close-btn close-btn--12" onclick="removeFileFieldFun()"><i class="far fa-times-circle"></i></span>
+                    </label>
+                    <input type="file" name="modfile11" accept=".mp4, .pdf">
+                    <input class="uk-input elem-disabled" type="text" placeholder="Select file..." disabled>
+                    <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                </div>
+            </div>
+
+            <div class="files uk-hidden" id="file13">
+                <div uk-form-custom="target: true" class="uk-width-1-1">
+                    <label for="" class="uk-form-label">
+                        <span>Upload File 13</span> 
+                        <span class="close-btn close-btn--13" onclick="removeFileFieldFun()"><i class="far fa-times-circle"></i></span>
+                    </label>
+                    <input type="file" name="modfile12" accept=".mp4, .pdf">
+                    <input class="uk-input elem-disabled" type="text" placeholder="Select file..." disabled>
+                    <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                </div>
+            </div>
+
+            <div class="files uk-hidden" id="file14">
+                <div uk-form-custom="target: true" class="uk-width-1-1">
+                    <label for="" class="uk-form-label">
+                        <span>Upload File 14</span> 
+                        <span class="close-btn close-btn--14" onclick="removeFileFieldFun()"><i class="far fa-times-circle"></i></span>
+                    </label>
+                    <input type="file" name="modfile13" accept=".mp4, .pdf">
+                    <input class="uk-input elem-disabled" type="text" placeholder="Select file..." disabled>
+                    <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                </div>
+            </div>
+
+            <div class="files uk-hidden" id="file15">
+                <div uk-form-custom="target: true" class="uk-width-1-1">
+                    <label for="" class="uk-form-label">
+                        <span>Upload File 15</span> 
+                        <span class="close-btn close-btn--15" onclick="removeFileFieldFun()"><i class="far fa-times-circle"></i></span>
+                    </label>
+                    <input type="file" name="modfile14" accept=".mp4, .pdf">
+                    <input class="uk-input elem-disabled" type="text" placeholder="Select file..." disabled>
+                    <a class="uk-form-icon uk-form-icon-flip" href="#" uk-icon="icon: link" style="top:25px;"></a>
+                </div>
+            </div>
+        </section>
+    </fieldset>
+
+    <fieldset class="uk-fieldset custom-fieldset">
+        <div class="uk-flex custom-fieldset--upperDiv uk-margin-bottom">
+            <h6 class="custom-legend uk-margin-remove-bottom">Add Reference Links <em>(Limit 10)</em></h6>
+            <button class="custom-add-button" type="button" id="addLinks"><i class="fas fa-plus-circle"></i> Add links</button>
+        </div>
+        <section class="custom-fieldset--section reference-div">
+        </section>
+    </fieldset>
+
+    <div class="uk-margin">
+        {% if module %}
+        <button type="submit" class="uk-button uk-button-primary" onclick="btnName = 'update'" name="save">Update</button>
+        <button type="button" class="uk-button uk-button-default-2" onclick="history.back()">Cancel</button>
+        {% else %}
+        <button type="submit" class="uk-button uk-button-primary" onclick="btnName = 'submit'" name="submit">Submit</button>
+        {% endif %}
+    </div>
+</form>
+{% endblock %}
+
+{% block loader %}
+<section class="process-form custom-model" hidden>
+    <div class="uk-width-1-2 uk-margin-auto process-form__div custom-model__div">
+        <form method="POST" class="uk-margin" id="processForm" data-action="{% url 'adminboard:addprocess_name'%}">
+            <div class="uk-flex">
+                <label for="" class="label uk-flex-1">Add Process</label>
+                <span uk-icon="icon: close" class="close" title="close" uk-toggle="target: .process-form"></span>
+            </div>
+            <div class="uk-flex uk-margin-small-top">
+                {%csrf_token%}
+                <input type="text" name="process_name" class="uk-input process-input" placeholder="Enter process name" required>
+                <button class="uk-button uk-button-primary">Add</button>
+            </div>
+            <span class="uk-text-danger uk-text-small uk-hidden process-warning">Process name already exists!</span>
+        </form>
+
+        <div class="uk-margin">
+            <label for="" class="label">Process List</label>
+            <ul class="uk-list uk-list-divider" id="processList">
+                {% for i in process_name %}
+                <li class="uk-flex">
+                    <span class="uk-flex-1 process_name">{{i.process_name}}</span>
+                    <a data-href="{% url 'adminboard:delprocess_name' id=i.id %}" class="uk-delete-icon" title="Delete"><span uk-icon="icon: trash"></span></a>
+                </li>
+                {% endfor %}            
+            </ul>
+        </div>
+        <hr class="divider">
+        <p class="uk-margin-top"><strong>Note:</strong> Refresh page to see changes</p>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script src="{% static 'adminboard/js/chosen.jquery.min.js' %}"></script>
+<script src="{% static 'adminboard/js/ui.js' %}"></script>
+<script>
+    // Existing Modules
+    const moduleNames = [];
+    {% for i in modules %}
+        moduleNames.push(`{{i|safe}}`);
+    {% endfor %}
+    // Edit Module
+    {% if module %}
+        const editModule = {
+            "name": `{{ module.module_name|safe }}`,
+            "process": `{{ module.process_name|safe }}`.split(', '),
+            "location": `{{ module.location|safe }}`.split(', '),
+            "links": [
+                "{{ module.link1 }}",
+                "{{ module.link2 }}",
+                "{{ module.link3 }}",
+                "{{ module.link4 }}",
+                "{{ module.link5 }}",
+                "{{ module.link6 }}",
+                "{{ module.link7 }}",
+                "{{ module.link8 }}",
+                "{{ module.link9 }}",
+                "{{ module.link10 }}"
+            ],
+            "file1": `{{ module.file1 }}`,
+            "file2": `{{ module.file2 }}`,
+            "videoFile": `{{ module.video_file }}`,
+            "file3": `{{ module.file3 }}`,
+            "file4": `{{ module.file4 }}`,
+            "file5": `{{ module.file5 }}`,
+            "file6": `{{ module.file6 }}`,
+            "file7": `{{ module.file7 }}`,
+            "file8": `{{ module.file8 }}`,
+            "file9": `{{ module.file9 }}`,
+            "file10": `{{ module.file10 }}`,
+            "file11": `{{ module.file11 }}`,
+            "file12": `{{ module.file12 }}`,
+            "file13": `{{ module.file13 }}`,
+            "file14": `{{ module.file14 }}`,
+        };
+    {% else %}
+        const editModule = false;
+    {% endif %}
+</script>
+<script src="{% static 'adminboard/js/module.form.js' %}"></script>
+{% endblock %}

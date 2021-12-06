@@ -1,0 +1,386 @@
+{% extends 'adminboard/home.html' %}
+{% load staticfiles %}
+
+{% block extrastyle %}
+<title>{{ module.module_name }}</title>
+{% endblock %}
+
+{% block html %}
+<h1 class="uk-flex uk-flex-center">
+    <p class="uk-flex-1 custom-heading-1">
+        <span class="go-back" onclick="history.back()" uk-icon="icon: arrow-left"></span>
+        <span>{{ module.module_name }}</span>
+    </p>
+    {% if module.link1 %}
+    <div class="links" onclick="this.classList.toggle('links-active')">
+        <p>View Reference Links <span uk-icon="icon: chevron-down" class="uk-margin-small-left"></span></p>
+        <ul data-class="{{module.module_name}}" class="all-links">
+            {% if module.link1 %}
+            <li class="link-items"><a href="{{module.link1}}" target="_blank">{{module.module_name}} Link - 1</a></li>
+            {% endif %}
+            {% if module.link2 %}
+            <li class="link-items"><a href="{{module.link2}}" target="_blank">{{module.module_name}} Link - 2</a></li>
+            {% endif %}
+            {% if module.link3 %}
+            <li class="link-items"><a href="{{module.link3}}" target="_blank">{{module.module_name}} Link - 3</a></li>
+            {% endif %}
+            {% if module.link4 %}
+            <li class="link-items"><a href="{{module.link4}}" target="_blank">{{module.module_name}} Link - 4</a></li>
+            {% endif %}
+            {% if module.link5 %}
+            <li class="link-items"><a href="{{module.link5}}" target="_blank">{{module.module_name}} Link - 5</a></li>
+            {% endif %}
+            {% if module.link6 %}
+            <li class="link-items"><a href="{{module.link6}}" target="_blank">{{module.module_name}} Link - 6</a></li>
+            {% endif %}
+            {% if module.link7 %}
+            <li class="link-items"><a href="{{module.link7}}" target="_blank">{{module.module_name}} Link - 7</a></li>
+            {% endif %}
+            {% if module.link8 %}
+            <li class="link-items"><a href="{{module.link8}}" target="_blank">{{module.module_name}} Link - 8</a></li>
+            {% endif %}
+            {% if module.link9 %}
+            <li class="link-items"><a href="{{module.link9}}" target="_blank">{{module.module_name}} Link - 9</a></li>
+            {% endif %}
+            {% if module.link10 %}
+            <li class="link-items"><a href="{{module.link10}}" target="_blank">{{module.module_name}} Link - 10</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+</h1>
+
+{% if module.file1 %}
+<div class="viewer">
+    <ul uk-accordion>
+        {% if module.file1 %}
+        <li class="">
+            <a class="uk-accordion-title" href="#">File 1</a>
+            <div class="uk-accordion-content">
+                {% if extension.0 == 'pdf' %}
+                <div class="slide uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-card-default" data-url="/media/{{module.file1}}">
+                </div>
+                {% else %}
+                <video controls data-type="video" width="100%" style="height: calc(100vh - 250px);">
+                    <source src="/media/{{ module.file1 }}" type="video/mp4">
+                </video>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        {% if module.file2 %}
+        <li class="">
+            <a class="uk-accordion-title" href="#">File 2</a>
+            <div class="uk-accordion-content">
+                {% if extension.1 == 'pdf' %}
+                <div class="slide uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-card-default" data-url="/media/{{module.file2}}">
+                </div>
+                {% else %}
+                <video controls data-type="video" width="100%" style="height: calc(100vh - 250px);">
+                    <source src="/media/{{ module.file2 }}" type="video/mp4">
+                </video>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        {% if module.video_file %}
+        <li class="">
+            <a class="uk-accordion-title" href="#">File 3</a>
+            <div class="uk-accordion-content">
+                {% if extension.2 == 'pdf' %}
+                <div class="slide uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-card-default" data-url="/media/{{module.video_file}}">
+                </div>
+                {% else %}
+                <video controls data-type="video" width="100%" style="height: calc(100vh - 250px);">
+                    <source src="/media/{{ module.video_file }}" type="video/mp4">
+                </video>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        {% if module.file3 %}
+        <li class="">
+            <a class="uk-accordion-title" href="#">File 4</a>
+            <div class="uk-accordion-content">
+                {% if extension.3 == 'pdf' %}
+                <div class="slide uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-card-default" data-url="/media/{{module.file3}}">
+                </div>
+                {% else %}
+                <video controls data-type="video" width="100%" style="height: calc(100vh - 250px);">
+                    <source src="/media/{{ module.file3 }}" type="video/mp4">
+                </video>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        {% if module.file4 %}
+        <li class="">
+            <a class="uk-accordion-title" href="#">File 5</a>
+            <div class="uk-accordion-content">
+                {% if extension.4 == 'pdf' %}
+                <div class="slide uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-card-default" data-url="/media/{{module.file4}}">
+                </div>
+                {% else %}
+                <video controls data-type="video" width="100%" style="height: calc(100vh - 250px);">
+                    <source src="/media/{{ module.file4 }}" type="video/mp4">
+                </video>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        {% if module.file5 %}
+        <li class="">
+            <a class="uk-accordion-title" href="#">File 6</a>
+            <div class="uk-accordion-content">
+                {% if extension.5 == 'pdf' %}
+                <div class="slide uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-card-default" data-url="/media/{{module.file5}}">
+                </div>
+                {% else %}
+                <video controls data-type="video" width="100%" style="height: calc(100vh - 250px);">
+                    <source src="/media/{{ module.file5 }}" type="video/mp4">
+                </video>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        {% if module.file6 %}
+        <li class="">
+            <a class="uk-accordion-title" href="#">File 7</a>
+            <div class="uk-accordion-content">
+                {% if extension.6 == 'pdf' %}
+                <div class="slide uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-card-default" data-url="/media/{{module.file6}}">
+                </div>
+                {% else %}
+                <video controls data-type="video" width="100%" style="height: calc(100vh - 250px);">
+                    <source src="/media/{{ module.file6 }}" type="video/mp4">
+                </video>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        {% if module.file7 %}
+        <li class="">
+            <a class="uk-accordion-title" href="#">File 8</a>
+            <div class="uk-accordion-content">
+                {% if extension.7 == 'pdf' %}
+                <div class="slide uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-card-default" data-url="/media/{{module.file7}}">
+                </div>
+                {% else %}
+                <video controls data-type="video" width="100%" style="height: calc(100vh - 250px);">
+                    <source src="/media/{{ module.file7 }}" type="video/mp4">
+                </video>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        {% if module.file8 %}
+        <li class="">
+            <a class="uk-accordion-title" href="#">File 9</a>
+            <div class="uk-accordion-content">
+                {% if extension.8 == 'pdf' %}
+                <div class="slide uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-card-default" data-url="/media/{{module.file8}}">
+                </div>
+                {% else %}
+                <video controls data-type="video" width="100%" style="height: calc(100vh - 250px);">
+                    <source src="/media/{{ module.file8 }}" type="video/mp4">
+                </video>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        {% if module.file9 %}
+        <li class="">
+            <a class="uk-accordion-title" href="#">File 10</a>
+            <div class="uk-accordion-content">
+                {% if extension.9 == 'pdf' %}
+                <div class="slide uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-card-default" data-url="/media/{{module.file9}}">
+                </div>
+                {% else %}
+                <video controls data-type="video" width="100%" style="height: calc(100vh - 250px);">
+                    <source src="/media/{{ module.file9 }}" type="video/mp4">
+                </video>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        {% if module.file10 %}
+        <li class="">
+            <a class="uk-accordion-title" href="#">File 11</a>
+            <div class="uk-accordion-content">
+                {% if extension.10 == 'pdf' %}
+                <div class="slide uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-card-default" data-url="/media/{{module.file10}}">
+                </div>
+                {% else %}
+                <video controls data-type="video" width="100%" style="height: calc(100vh - 250px);">
+                    <source src="/media/{{ module.file10 }}" type="video/mp4">
+                </video>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        {% if module.file11 %}
+        <li class="">
+            <a class="uk-accordion-title" href="#">File 12</a>
+            <div class="uk-accordion-content">
+                {% if extension.11 == 'pdf' %}
+                <div class="slide uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-card-default" data-url="/media/{{module.file11}}">
+                </div>
+                {% else %}
+                <video controls data-type="video" width="100%" style="height: calc(100vh - 250px);">
+                    <source src="/media/{{ module.file11 }}" type="video/mp4">
+                </video>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        {% if module.file12 %}
+        <li class="">
+            <a class="uk-accordion-title" href="#">File 13</a>
+            <div class="uk-accordion-content">
+                {% if extension.12 == 'pdf' %}
+                <div class="slide uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-card-default" data-url="/media/{{module.file12}}">
+                </div>
+                {% else %}
+                <video controls data-type="video" width="100%" style="height: calc(100vh - 250px);">
+                    <source src="/media/{{ module.file12 }}" type="video/mp4">
+                </video>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        {% if module.file13 %}
+        <li class="">
+            <a class="uk-accordion-title" href="#">File 14</a>
+            <div class="uk-accordion-content">
+                {% if extension.13 == 'pdf' %}
+                <div class="slide uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-card-default" data-url="/media/{{module.file13}}">
+                </div>
+                {% else %}
+                <video controls data-type="video" width="100%" style="height: calc(100vh - 250px);">
+                    <source src="/media/{{ module.file13 }}" type="video/mp4">
+                </video>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        {% if module.file14 %}
+        <li class="">
+            <a class="uk-accordion-title" href="#">File 15</a>
+            <div class="uk-accordion-content">
+                {% if extension.14 == 'pdf' %}
+                <div class="slide uk-flex uk-flex-column uk-flex-center uk-flex-middle uk-card-default" data-url="/media/{{module.file14}}">
+                </div>
+                {% else %}
+                <video controls data-type="video" width="100%" style="height: calc(100vh - 250px);">
+                    <source src="/media/{{ module.file14 }}" type="video/mp4">
+                </video>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+    </ul>
+    <hr class="uk-divider-icon">
+</div>
+{% endif %}
+
+{% if scenarios %}
+<div class="uk-margin-top uk-margin-bottom">
+    <h1 class="custom-heading-2">Case Scenarios</h1>
+
+    <table class="uk-table uk-table-hover uk-table-middle uk-table-divider uk-background-default" id="viewCase">
+        <thead>
+            <tr>
+                <th class="">ID</th>
+                <th class="uk-table-expand">Scenario</th>
+                <th class="uk-width-small">Option 1</th>
+                <th class="uk-width-small">Option 2</th>
+                <th class="uk-width-small">Option 3</th>
+                <th class="uk-width-small">Option 4</th>
+                <th class="uk-width-small">Correct option</th>
+                <th class="uk-width-small">Reason</th>
+                <th class="uk-width-small">Media</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for i in scenarios %}
+            <tr>
+                <td class="uk-table-link">
+                    <a style="color:var(--dark); text-decoration: none;">{{ i.id }}</a>
+                </td>
+                <td class="uk-text">{{ i.scenario_desc }}</td>
+                <td class="uk-text-truncate">{{ i.option1 }}</td>
+                <td class="uk-text-truncate">{{ i.option2 }}</td>
+                <td class="uk-text-truncate">{{ i.option3 }}</td>
+                <td class="uk-text-truncate">{{ i.option4 }}</td>
+                <td class="uk-text-truncate">{{ i.correctoption }}</td>
+                <td class="uk-text-truncate">{{ i.reason }}</td>
+                <td class="uk-text-truncate">
+                    {% if i.scenario_file %}
+                    <a href="/media/{{i.scenario_file}}" target="__blank">{{i.scenario_file}}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<hr class="uk-divider-icon">
+{% endif %}
+
+{% if quest_per_mod %}
+<div class="uk-margin-top uk-margin-bottom">
+    <h1 class="custom-heading-2">Questions</h1>
+
+    <div class="">
+        <table class="uk-table uk-table-hover uk-table-middle uk-table-divider uk-background-default" id="viewCase">
+            <thead>
+                <tr>
+                    <th class="">ID</th>
+                    <th class="uk-table-expand">Question</th>
+                    <th class="uk-width-small">Option 1</th>
+                    <th class="uk-width-small">Option 2</th>
+                    <th class="uk-width-small">Option 3</th>
+                    <th class="uk-width-small">Option 4</th>
+                    <th class="uk-width-small">Correct option</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for i in quest_per_mod %}
+                <tr>
+                    <td class="uk-table-link">
+                        <a style="color:var(--dark); text-decoration: none;">{{ i.id }}</a>
+                    </td>
+                    <td class="uk-text">{{ i.question }}</td>
+                    <td class="uk-text-truncate">{{ i.option1 }}</td>
+                    <td class="uk-text-truncate">{{ i.option2 }}</td>
+                    <td class="uk-text-truncate">{{ i.option3 }}</td>
+                    <td class="uk-text-truncate">{{ i.option4 }}</td>
+                    <td class="uk-text-truncate">{{ i.correct_option }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+<hr class="uk-divider-icon">
+{% endif %}
+
+{% endblock %}
+
+{% block loader %}{% endblock %}
+
+{% block scripts %}
+<!-- Mozilla PDFJS -->
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+
+
+<script src="{% static 'adminboard/js/ui.js' %}"></script>
+<script>
+    const mediaFile = `{{ module.file2 }}`;
+    const mediaDiv = document.querySelector('#media-div');
+</script>
+{% if module.file1 %}
+<script src="{% static 'adminboard/js/pdf.js' %}"></script>
+{% endif %}
+{% endblock %}

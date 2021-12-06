@@ -1,0 +1,254 @@
+{% extends 'employee/home.html' %}
+{% load staticfiles %}
+
+{% block title %}{{ course_name }}{% endblock %}
+{% block styles %}
+    {% if modules_in_course|length != 0 %}
+        {% if not course_cover %}
+        <script>
+            function errCover(e){
+                const count = Math.ceil(Math.random() * 4);
+                e.setAttribute('src', `/static/employee/images/bg_${count}.svg`);
+            }
+        </script>
+        {% endif %}
+    {% endif %}
+    <link rel="stylesheet" href="{% static 'adminboard/css/chosen.min.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+{% endblock %}
+
+{% block hero %}{% endblock %}
+
+{% block body %}
+{% if messages %}
+{% for message in messages|slice:":1" %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+    <script>M.toast({html: "{{message}}", classes: 'toast toast-success', displayLength:2000});</script>
+    {% endif %}
+{% endfor %}
+{% endif %}
+<section class="px-16 py-8 relative" style="min-height: calc(100vh - 70px);">
+    <div class="flex items-center mb-12">
+        <a class="border border-gray-900 text-gray-900 rounded-full w-8 h-8 flex items-center justify-center mr-4 cursor-pointer" onclick="history.back()">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <p class="text-xl font-medium">Course Details</p>
+    </div>
+
+    <section class="grid grid-cols-3 gap-x-20">
+        <div class="col-span-1">
+            <div class="object-cover bg-blue-300 overflow-hidden" style="width: 100%; height: 260px;">
+                <img src="/media/{{course_cover}}" alt="cover" class="cover-image" onerror="setTimeout(()=> errCover(this))">
+            </div>
+            {% if not_a_user %}
+                <button type="button" class="btn btn--shadow" style="cursor: default;"><i class="fas fa-ban mr-2"></i> Not allowed to Enroll</button>
+            {% else %}
+                <div class="enroll-action">
+                    {% if course_status != 'deleted' %}
+                        {% if enrolled %}
+                            <a href="{% url 'employee:coursestarted' cname=course_name %}" class="btn btn--secondary block">Start Course</a>
+                        {% else %}
+                            <form id="enrollForm" method="POST" data-href="{% url 'adminboard:postassign' %}" data-course="{% url 'employee:coursestarted' cname=course_name %}" class="form-group">{% csrf_token %}
+                                <input type="text" value="{{course_name}}" name='course' hidden />
+                                <input type="text" value='self-assign' name='assign_to' hidden />
+                                <button type="submit" class="btn btn--primary"><i class="fas fa-plus mr-2"></i>Enroll</button>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <button class="btn btn--shadow recommend"><i class="fas fa-share-square mr-2"></i>Recommend</button>
+            {% endif %}
+        </div>
+        <div class="col-span-2">
+            <h1 class="text-5xl capitalize font-semibold break-normal">{{ course_name }}</h1>
+            <div class="flex items-center mt-2">
+                <p class="font-medium text-gray-700 mr-8">Modules: <span class="font-semibold text-black">{{course|length}}</span></p>
+                <p class="font-medium text-gray-700 mr-8">Test: 
+                    <span class="font-semibold text-black">
+                    {% for q in course_and_quest %}
+                    {% if q.0 == course_name %}
+                        {% if progress == True %}
+                            {{q.3}}
+                        {% else %}
+                            {% if q.4 != 0 %}
+                                Available
+                            {% else %}
+                                NA
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                    </span>
+                </p>
+                <p>Last Updated (IST): 
+                    <span class="font-semibold text-black">
+                    {% for q in course_and_quest %}
+                    {% if q.0 == course_name %}
+                        {{q.2}}
+                    {% endif %}
+                    {% endfor %}
+                    </span>
+                </p>
+            </div>
+
+            <div class="flex sm:flex-column gap-2 md:items-center mt-2 course-card" data-id="{{ course_name }}" data-rating="{{rating}}">
+                <p class="text-xl font-semibold text-yellow-500">{% if rating == None %}0{% else %}{{rating|floatformat:1}}{% endif %}</p>
+                <div class="stars-outer">
+                    <div class="stars-inner"></div>
+                </div>
+                <p class="text-sm font-medium text-gray-600">({{ people_count }})</p>
+            </div>
+
+            <section class="mt-12">
+                <h2 class="text-2xl text-gray-700 font-medium">Course Content</h2>
+
+                <ul class="mt-4">
+                    {% for i in course %}
+                    <li class="text-lg text-gray-700 py-3 border-b-2"><i class="fas fa-check mr-4"></i>{{ i.module.module_name }}</li>
+                    {% endfor %}
+                </ul>
+            </section>
+            <div class="mt-16 h-full">
+                <h2 class="text-2xl text-gray-700 font-medium my-4">User Reviews</h2>
+                <div class="grid grid-cols-6 gap-10">
+                    <section class="col-span-2">
+                        <div class="text-xl flex sm:flex-column gap-2 md:items-center mt-2 course-card" data-id="{{ course_name }}__all" data-rating="{{rating}}">
+                            <div class="stars-outer">
+                                <div class="stars-inner"></div>
+                            </div>
+                            <p class="font-medium text-yellow-800">{% if rating == None %}0{% else %}{{rating|floatformat:1}}{% endif %} out of 5</p>
+                        </div>
+                        <div class="text-lg font-medium text-gray-600 mb-4">{{ people_count }} total count</div>
+                        <div class="grid gap-y-5">
+                            <div class="grid grid-cols-8 items-center gap-x-4">
+                                <span class="col-span-2">5 star</span>
+                                <span class="col-span-5 h-8 bg-gray-400 rounded-lg relative overflow-hidden rating_bar" style="--custom-width: {{ rating_t.4|floatformat:0 }}%"></span>
+                                <span class="col-span-1">{{ rating_t.4|floatformat:0 }}%</span>
+                            </div>
+                            <div class="grid grid-cols-8 items-center gap-x-4">
+                                <span class="col-span-2">4 star</span>
+                                <span class="col-span-5 h-8 bg-gray-400 rounded-lg relative overflow-hidden rating_bar" style="--custom-width: {{ rating_t.3|floatformat:0 }}%"></span>
+                                <span class="col-span-1">{{ rating_t.3|floatformat:0 }}%</span>
+                            </div>
+                            <div class="grid grid-cols-8 items-center gap-x-4">
+                                <span class="col-span-2">3 star</span>
+                                <span class="col-span-5 h-8 bg-gray-400 rounded-lg relative overflow-hidden rating_bar" style="--custom-width: {{ rating_t.2|floatformat:0 }}%"></span>
+                                <span class="col-span-1">{{ rating_t.2|floatformat:0 }}%</span>
+                            </div>
+                            <div class="grid grid-cols-8 items-center gap-x-4">
+                                <span class="col-span-2">2 star</span>
+                                <span class="col-span-5 h-8 bg-gray-400 rounded-lg relative overflow-hidden rating_bar" style="--custom-width: {{ rating_t.1|floatformat:0 }}%"></span>
+                                <span class="col-span-1">{{ rating_t.1|floatformat:0 }}%</span>
+                            </div>
+                            <div class="grid grid-cols-8 items-center gap-x-4">
+                                <span class="col-span-2">1 star</span>
+                                <span class="col-span-5 h-8 bg-gray-400 rounded-lg relative overflow-hidden rating_bar" style="--custom-width: {{ rating_t.0|floatformat:0 }}%"></span>
+                                <span class="col-span-1">{{ rating_t.0|floatformat:0 }}%</span>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="col-span-4">
+                    {% if comments_in_c %}
+                        {% for comment in page_obj %}
+                        <div class="py-4 border-b border-solid border-gray-400">
+                            <section class="flex items-center mb-2 justify-between">
+                                <div class="flex items-center text-gray-700">
+                                    <i class="fas fa-user mr-2"></i>
+                                    <h3 class="font-semibold flex flex-row items-center space-x-3">
+                                        <span class="text-gray-800 text-lg">{{ comment.person_name }}</span>
+                                        <div class="w-1 h-1 rounded-full bg-gray-600"></div>
+                                        {% for person in df_designation_tuple %}
+                                            {% if person.0 == comment.person_email %}
+                                                <span class="text-gray-600">{{ person.1 }} ({{ comment.person_team }})</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </h3>
+                                </div>
+                                <p class="text-gray-600">{{comment.course_completedtime}} (IST)</p>
+                            </section>
+                            <div class="flex sm:flex-column gap-2 md:items-center course-card" data-id="{{ comment.person_email}}" data-rating="{{comment.rating_of_course}}">
+                                <p class="text-xl font-semibold text-yellow-500">{% if rating == None %}0{% else %}{{comment.rating_of_course|floatformat:1}}{% endif %}</p>
+                                <div class="stars-outer">
+                                    <div class="stars-inner"></div>
+                                </div>
+                            </div>
+                            <section class="mt-2">
+                                <p>{{ comment.improvement_rem }}</p>
+                            </section>
+                        </div>
+                        {% endfor %}
+                        <div class="pagination mt-6">
+                            <span class="step-links flex">
+                                {% if page_obj.has_previous %}
+                                    <a href="?page=1" class="pr-2"><svg class="w-6 h-6 px-4 text-blue-500 text-white rounded-md" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path></svg></a>
+                                    <a href="?page={{ page_obj.previous_page_number }}" class="pr-2"><svg class="w-6 h-6 px-4 text-blue-500 text-white rounded-md" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></a>
+                                {% endif %}
+                        
+                                <span class="current uppercase font-semibold">
+                                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                </span>
+                        
+                                {% if page_obj.has_next %}
+                                    <a href="?page={{ page_obj.next_page_number }}" class="px-2"><svg class="w-6 h-6 bg-blue-500 text-white rounded-md" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+                                    <a href="?page={{ page_obj.paginator.num_pages }}"><svg class="w-6 h-6 bg-blue-500 text-white rounded-md" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg></a>
+                                {% endif %}
+                            </span>
+                        </div>
+                    {% else %}
+                        <div class="py-4">
+                            <p class="bg-gray-300 p-4 text-xl text-center rounded-lg">No reviews yet.</p>
+                        </div>
+                    {% endif %}
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommendation Pop Up -->
+    <section class="absolute top-0 bottom-0 left-0 right-0 z-10 bg-gray-400 bg-opacity-25 flex items-center justify-center hidden" id="popupSect">
+        <div class="pop-up bg-white w-2/5 rounded-lg">
+            <h2 class="text-lg font-medium border-gray-500 border-b p-4">Recommend this course to your team member</h2>
+            <form action="{% url 'employee:viewrecommendation' %}" method="POST" class="p-4">
+                {% csrf_token %}
+                <div class="hidden">
+                    <input type="text" name="user_name" value="{{user_name}}">
+                    <input type="text" name="user_designation" value="{{user_designation}}">
+                </div>
+                <div class="">
+                    <div id="output-member"></div>
+                    <select data-placeholder="Add members..." name="members[]" id="mod-member" multiple class="chosen-select member-select" required>
+                        {% for i in employee_detail_dict %}
+                            {% if i.2 == True %}
+                            <option value="{{ i.0 }},{{ i.1 }},{{i.4}}" disabled>{{ i.0 }} ({{ i.1 }}) <sm class="text-red-600">-Already Enrolled</sm></option>
+                            {% elif i.3 == True %}
+                            <option value="{{ i.0 }},{{ i.1 }},{{i.4}}" disabled>{{ i.0 }} ({{ i.1 }}) <sm class="text-red-600">-Already Recommended</sm></option>
+                            {% else %}
+                            <option value="{{ i.0 }},{{ i.1 }},{{i.4}}">{{ i.0 }} ({{ i.1 }})</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <input type="text" value="{{ course_name }}" name="course_name" hidden />
+                    <input type="number" value="{{ course|length }}" name="number_of_modules" hidden />
+                </div>
+                <div class="flex items-center gap-20">
+                    <button type="submit" class="btn btn--primary">Recommend</button>
+                    <button type="button" class="btn btn--shadow" id="cancelPopup">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'employee/js/common.js' %}"></script>
+<script src="{% static 'adminboard/js/chosen.jquery.min.js' %}"></script>
+<script defer src="{% static 'employee/js/card.rating.js' %}"></script>
+<script defer src="{% static 'employee/js/course.action.js' %}"></script>
+<script>
+    // Member values
+    $('.member-select').chosen();
+    document.getElementById('output-member').innerHTML = location.search;
+</script>
+{% endblock %}

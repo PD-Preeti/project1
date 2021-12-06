@@ -1,0 +1,139 @@
+{% extends 'adminboard/home.html' %}
+{% load staticfiles %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.uikit.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.24/pagination/input.js"></script>
+<!-- DateRange -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<title>Case Study Submission</title>
+{% endblock %}
+
+{% block html %}
+<div class="submission-main">
+    <h2>Case Study Submission </h2>
+
+    <div class="uk-overflow-auto">
+
+        <table class="uk-table uk-table-hover uk-table-middle uk-table-divider uk-background-default" id="contributions">
+            <thead>
+                <tr>
+                    <th class="uk-table-shrink">#</th>
+                    <th class="uk-table-shrink">Name</th>
+                    <th class="uk-width-small">Email</th>
+                    <th class="uk-width-small">Team</th>
+                    <th class="uk-width-small">Title</th>
+                    <th class="uk-width-small">Processes</th>
+                    <th class="uk-width-small">Case_Study</th>
+                    <th class="uk-width-small">Other_Docs</th>
+                    <th class="uk-width-small">Submitted_Date</th>
+                    <th class="uk-width-small">Remark</th>
+                    <th class="uk-width-small">Score</th>
+                    <th class="uk-width-small">Action/Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for i in contributions %}
+                <tr>
+                    <td>{{i.id}}</td>
+                    <td class="uk-table-link" title="{{ i.contributor_name }}">
+                        <a class="uk-link-reset">{{ i.contributor_name }}</a>
+                    </td>
+                    <td class="uk-text-truncate" title="{{ i.contributor_email }}">{{ i.contributor_email }}</td>
+                    <td class="uk-text-truncate" title="{{ i.contributor_team }}">{{ i.contributor_team }}</td>
+                    <td class="uk-text-truncate" title="{{i.title}}">{{i.title}}</td>
+                    <td class="uk-text-truncate" title="{{i.process_name}}">{{i.process_name}}</td>
+                    <td class="uk-text-truncate" title="{% if i.case_study %}{{i.case_study}}{% endif %}">
+                        {% if i.case_study %}
+                        <span 
+                            uk-toggle="target: .caseStudy__{{i.id}}; animation: uk-animation-slide-left, uk-animation-slide-bottom"
+                            animation="true"
+                            duration="200"
+                        >{{i.case_study}}</span>
+                        <div class="uk-position-absolute uk-padding-small uk-card uk-card-default uk-position-z-index caseStudy__{{i.id}}" style="width: 200px; right: 4rem" hidden>
+                            <p class="uk-text-bold">{{i.case_study}}</p>
+                            <div>
+                                <a href="{{i.case_study.url}}" target="_blank" style="text-decoration: underline; margin-right: .5rem">View</a>
+                                <a href="{{i.case_study.url}}" download style="text-decoration: underline;">Download</a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td class="uk-text-truncate" title="{% if i.supporting_docs %}{{i.supporting_docs}}{% endif %}">
+                        {% if i.supporting_docs %}
+                        <span 
+                            uk-toggle="target: .otherDoc__{{i.id}}; animation: uk-animation-slide-left, uk-animation-slide-bottom"
+                            animation="true"
+                            duration="200"
+                        >{{i.supporting_docs}}</span>
+                        <div class="uk-position-absolute uk-padding-small uk-card uk-card-default uk-position-z-index otherDoc__{{i.id}}" style="width: 200px; right: 4rem" hidden>
+                            <p class="uk-text-bold">{{i.supporting_docs}}</p>
+                            <div>
+                                <a href="{{i.supporting_docs.url}}" target="_blank" style="text-decoration: underline; margin-right: .5rem">View</a>
+                                <a href="{{i.supporting_docs.url}}" download style="text-decoration: underline;">Download</a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td class="uk-text-truncate" title="{{i.submission_date}}">{{i.submission_date}}</td>
+                    <td class="uk-text-truncate" title="{% if i.remark %}{{i.remark}}{% endif %}" onclick="popupTab(this)">
+                        {% if i.remark %}
+                        {{i.remark}}
+                        {% else %}
+                        {% if i.status == 'Pending' %}
+                        <form data-action="{% url 'adminboard:status' id=i.id %}" method="POST" id="status_{{i.id}}" class="statusForm">
+                            {% csrf_token %}
+                            <textarea class="uk-input" placeholder="make remark" name="remark" required></textarea>
+                            <div class="uk-flex uk-flex-column uk-margin-small-top scorebox uk-hidden">
+                                <label for="" class="uk-form-label">Enter score <em>(if accepted - b/w 0-10)</em></label>
+                                <input type="number" class="uk-input" name="score" value="0" min="0" max="10">
+                            </div>
+                            <input type="text" class="uk-hidden" value="" name="status"/>
+                        </form>
+                        {% else %}
+                        No remark
+                        {% endif %}
+                        {% endif %}
+                    </td>
+                    <td class="uk-text-turncate">
+                        {% if i.status == 'Accepted' %}
+                        {{score}}
+                        {% elif i.status == 'Pending' %}
+                        -
+                        {% else %}
+                        NA
+                        {% endif %}
+                    </td>
+                    <td class="uk-text-truncate">
+                        {% if i.status == "Pending" %}
+                        <div class="status-buttons">
+                            <button name="Accepted" class="contrib accept" form="status_{{i.id}}"><i class="fas fa-check-circle"></i></button>
+                            <button name="Rejected" class="contrib reject" form="status_{{i.id}}"><i class="fas fa-times-circle"></i></button>
+                        </div>
+                        {% else %}
+                        {{i.status}}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div id="datatable_detail_wrapper"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block loader %}{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'adminboard/js/ui.js' %}"></script>
+<script src="{% static 'adminboard/js/contrib.js' %}"></script>
+{% endblock %}

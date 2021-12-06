@@ -1,0 +1,101 @@
+{% load staticfiles %}
+
+<header class="header home-head flex items-center h-20 px-16">
+    <div class="logo-container flex-1">
+        <div class="flex items-center" onclick="location.href=`{% url 'employee:employeehome' %}`">
+            <img src="{% static 'employee/images/aeroplane.svg' %}" alt="logo" class="logo">
+            <span class="logo-mark">studyhall</span>
+        </div>
+    </div>
+
+    <nav class="navbar flex-1 flex justify-end">
+        <ul class="nav flex items-center">
+            <li class="nav-items"><a href="{% url 'employee:employeehome' %}">Home</a></li>
+            <li class="nav-items"><a href="{% url 'employee:your_courses' %}">Your Courses</a></li>
+            <li class="nav-items"><a href="{% url 'employee:your_contribution' %}">Your Contributions</a></li>
+            <li class="nav-items"><a href="{% url 'employee:viewrecommendation' %}" class="nav-tag notification notification-active" data-value="{{recommendation_count}}"><i class="far fa-bell"></i></a></li>
+            <li class="nav-items relative">
+                <a class="nav-tag user-tag"><span id="userName"></span></a>
+                <ul class="float-card" id="floatCard">
+                    <li class="float-card-items"><a><i class="fas fa-user mr-2"></i>Hi {{first_name}}!</a></li>
+                    <!-- <li class="float-card-items" onclick="openReport()"><a><i class="fas fa-bug mr-2"></i>Report an Issue?</a></li> -->
+                    <li class="float-card-items">
+                        <a href="{% url 'employee:dashboard' %}"><i class="fas fa-chart-line mr-2"></i> Dashboard</a>
+                    </li>
+                    <li class="float-card-items">
+                        <a href="{% url 'employee:logout_emp' %}"><i class="fas fa-power-off mr-2"></i> Logout</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+{% block report_form %}
+<!-- Report Bug Pop Up -->
+<section class="fixed top-0 bottom-0 left-0 right-0 z-10 bg-gray-400 bg-opacity-25 flex items-center justify-center hidden" id="reportPopup" data-toggle="false">
+    <div class="pop-up bg-white w-2/5 rounded-lg">
+        <h2 class="text-lg font-medium border-gray-500 border-b p-4">Report an Issue/Bug?</h2>
+        <form action="{% url 'employee:issueaction' %}" method="POST" class="p-4" enctype="multipart/form-data">
+            {% csrf_token %}
+            <section class="flex flex-col mb-4">
+                <label for="reportTitle">Title</label>
+                <input type="text" name="report_title" id="reportTitle" class="border border-black p-2 rounded-lg">
+            </section>
+            <section class="flex flex-col mb-4">
+                <label for="reportDescription">Description</label>
+                <textarea name="report_description" id="reportDescription" class="border border-black p-2 rounded-lg"></textarea>
+            </section>
+            <section class="flex flex-col mb-4">
+                <label for="reportFile">Attach screenshot <em>(optional)</em></label>
+                <div class="relative">
+                    <input type="file" name="report_file" id="reportFile" 
+                        class="absolute opacity-0 top-0 bottom-0 left-0 right-0 w-full cursor-pointer"
+                        onchange="this.nextElementSibling.value = this.value.slice(-(this.value.length - 12))"
+                        >
+                    <input type="text" name="report_file_text" class="border border-black p-2 rounded-lg w-full" placeholder="Choose File..." disabled>
+                </div>
+            </section>
+            <div class="flex items-center gap-20">
+                <button type="submit" class="btn btn--primary">Report</button>
+                <button type="button" class="btn btn--shadow" id="cancelReportPopup" onclick="closeReport()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<script defer>
+    // User-Tag Value
+    const userTag = document.querySelector('.user-tag'),
+          userName = userTag.querySelector('#userName'),
+          floatCard = document.querySelector('.float-card');
+    userName.textContent = '{{first_name}}'.split('')[0];
+    let userEvt = false;
+
+    userTag.addEventListener('click', (e) => {
+        if(!userEvt){
+            floatCard.classList.add('float-card--open');
+            userEvt = true;
+        }else{
+            floatCard.classList.remove('float-card--open');
+            userEvt = false;
+        }
+    });
+
+    function openReport() {
+        const reportPopup = document.querySelector('#reportPopup');
+        if(reportPopup.dataset.toggle === 'false'){
+            reportPopup.classList.remove('hidden');
+            reportPopup.dataset.toggle = 'true';
+        }
+    }
+
+    function closeReport(){
+        const reportPopup = document.querySelector('#reportPopup');
+        if(reportPopup.dataset.toggle === 'true'){
+            reportPopup.classList.add('hidden');
+            reportPopup.dataset.toggle = 'false';
+        }
+    }
+</script>
+{% endblock %}
